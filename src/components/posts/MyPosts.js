@@ -38,7 +38,7 @@ export const MyPosts = () => {
 
                         }
                         else {
-                            <div>You have not created any posts yet!</div>
+                            return <div>You have not created any posts yet!</div>
                         }
                     }
                 )
