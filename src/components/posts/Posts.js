@@ -31,8 +31,8 @@ export const Posts = () => {
                             <img className="postPic" src={post.image_url} alt=""></img>
                             <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                             <div className="postInfo">
-                                <p>Author: {post.author}</p>
-                                <p>Category: {post.category}</p>
+                                <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                                <p>Category: {post.category.label}</p>
                             </div>
                         </li>
                     }
