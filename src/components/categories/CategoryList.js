@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getCategories } from "../../managers/Categories"
+import { getCategories } from "../../managers/CategoryManager"
 
 
 
