@@ -1,0 +1,5 @@
+
+.both-things {
+    display: flex;
+    justify-content: space-between;
+}
