@@ -19,32 +19,33 @@ export const MyPosts = () => {
     const localUser = localStorage.getItem("auth_token")
     const userObject = JSON.parse(localUser)
 
+    const myPosts = allPosts.filter(post => userObject === post.user_id)
     
-    return <section>
+
+    if (myPosts.length === 0) {
+        return <div>You have no posts created yet!</div>
+    }
+    else {
+        return <section>
         <h2>My Posts</h2>
         <div className = "postsSection">
             {
-                allPosts.map(
+                myPosts.map(
                     (post) => {
-                        if (userObject === post.user_id) {
-                            return <li className="postBox">
-                                <img className="postPic" src={post.image_url} width="600px" alt=""></img>
-                                <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
-                                <div className="postInfo">
-                                    <p>Author: {post.author}</p>
-                                    <p>Category: {post.category}</p>
-                                </div>
-                            </li>
-
-                        }
-                        else {
-                            return <div>You have not created any posts yet!</div>
-                        }
+                        return <li className="postBox">
+                        <img className="postPic" src={post.image_url} width="600px" alt=""></img>
+                        <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
+                        <div className="postInfo">
+                            <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                            <p>Category: {post.category.label}</p>
+                        </div>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </li>   
                     }
                 )
             }
         </div>
     </section>
-    
-    
+    }
 }
