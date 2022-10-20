@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { getPosts } from "../../managers/PostManager"
 
 
 export const Posts = () => {
@@ -11,8 +12,7 @@ export const Posts = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/posts`)
-                .then(response => response.json())
+            getPosts()
                 .then((allPostsArray) => {
                     setAllPosts(allPostsArray)
                 })
@@ -28,7 +28,7 @@ export const Posts = () => {
                 {
                     allPosts.map((post) => {
                         return <li className="postBox">
-                            <img className="postPic" src={post.image_url} alt=""></img>
+                            <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                             <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                             <div className="postInfo">
                                 <p>Author: {post.user.first_name} {post.user.last_name}</p>
