@@ -1,16 +1,65 @@
 import { useState, useEffect } from "react";
-import { getTags } from "../managers/Tags";
+import { getTags, updateTags } from "../managers/Tags";
 
 
 export const TagList = () => {
 
     const [tags, setTags] = useState([])
+    const [tag, setTag] = useState({})
     
 
     useEffect(() => {
         getTags().then((TagsData) => setTags(TagsData))
     }, [])
+
+    const handleControlledInputChange = (event) => {
+        const newTag = Object.assign({}, tag)
+        newTag[event.target.name] = event.target.value
+        setTag(newTag)
+      }
     
+    const editTag = () => {
+
+        updateTags({
+            id: tag.id,
+            label: tag.label
+        })
+            .then(() => {
+                window.location.reload()
+            })
+    }
+    
+    const handleSaveButtonClick = (clickEvent) => {
+        clickEvent.preventDefault()
+
+
+
+        return <>
+            <form className="tagForm">
+                <h2 className="tagForm_label">{"Edit Tag"}</h2>
+                <fieldset>
+                <div className="form-group">
+                    <label htmlFor="label"></label>
+                    <input type="text" name="label" required autoFocus className="form-control"
+                    placeholder="Tag"
+                    defaultValue={tag.label}
+                    onChange={handleControlledInputChange}
+                    />
+                </div>
+                </fieldset>
+                <button type="submit"
+                    onClick={evt => {
+                        evt.preventDefault()
+                        editTag()
+                }}
+                className="btn btn-primary">
+                {"Save"}
+              </button>
+            </form>
+        </>
+            
+    }
+
     return <>
         <h2>TAGS</h2>
         <section>
@@ -18,7 +67,11 @@ export const TagList = () => {
             tags.map(
                 (tag) => <>
                     <div>{tag.label}</div>
-                    <button>Edit</button>
+                    <button
+                        onClick={(clickEvent) => handleSaveButtonClick(clickEvent)}
+                        className="btn btn-primary">
+                        Edit
+                    </button>
                     <button>Delete</button>
                 </>
                 )
@@ -27,3 +80,5 @@ export const TagList = () => {
 
 </>
 }
+
+//boolean state and selected tag state. flip boolean set selected tag.
