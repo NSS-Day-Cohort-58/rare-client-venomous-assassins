@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { getPosts } from "../../managers/PostManager"
 
 
@@ -16,6 +16,7 @@ export const MyPosts = () => {
     },
     [])
 
+    let navigate = useNavigate()
     const localUser = localStorage.getItem("auth_token")
     const userObject = JSON.parse(localUser)
 
@@ -39,7 +40,13 @@ export const MyPosts = () => {
                             <p>Author: {post.user.first_name} {post.user.last_name}</p>
                             <p>Category: {post.category.label}</p>
                         </div>
-                        <button>Edit</button>
+                        <button id={post.id}
+                        onClick = {
+                            (evt) => {
+                                let postId = evt.target.id
+                                navigate(`/edit_post/${postId}`)
+                            }
+                        }>Edit</button>
                         <button>Delete</button>
                     </li>   
                     }
