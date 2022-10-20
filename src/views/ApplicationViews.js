@@ -4,8 +4,9 @@ import { Register } from "../components/auth/Register"
 import { UserList } from "../components/users/UserList"
 import { Authorized } from "./Authorized"
 import { Posts } from "../components/posts/Posts"
-import { TagList } from "../tags/TagList"
 import { CategoryList } from "../components/categories/CategoryList"
+
+import { TagList } from "../tags/TagList"
 import { MyPosts } from "../components/posts/MyPosts"
 
 export const ApplicationViews = ({ token, setToken }) => {

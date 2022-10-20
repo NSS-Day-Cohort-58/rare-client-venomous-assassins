@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTags } from "../components/managers/tags";
+import { getTags } from "../managers/Tags";
 
 
 export const TagList = () => {
