@@ -4,6 +4,7 @@ import { useEffect } from "react"
 
 export const PostForm = () => {
 
+
     const navigate = useNavigate()
     const [categories, setCategories] = useState([])
     const [post, setNewPost] = useState({
@@ -17,7 +18,7 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8088/categories')
+            fetch('http://localhost:8088/categories?_sortBy=label')
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -42,8 +43,11 @@ export const PostForm = () => {
     const saveButton = (event) => {
         event.preventDefault()
 
+        const localUser = localStorage.getItem("auth_token")
+        const userObject = JSON.parse(localUser)
+
         const postToSendToAPI = {
-            user_id: post.user_id,
+            user_id: userObject,
             category_id: post.category_id,
             title: post.title,
             publication_date: post.publication_date,
@@ -101,7 +105,7 @@ export const PostForm = () => {
             <label htmlFor="publicationDate">Date:</label>
             <input
                 required autoFocus
-                type="text"
+                type="date"
                 className="form-control"
                 placeholder="What's today's date?"
                 value={post.publication_date}
@@ -124,7 +128,7 @@ export const PostForm = () => {
                 onChange={
                     (evt) => {
                         const copy = structuredClone(post)
-                        copy.image = evt.target.value
+                        copy.image_url = evt.target.value
                         setNewPost(copy)
                     }
                 } />
