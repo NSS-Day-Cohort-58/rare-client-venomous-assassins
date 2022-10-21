@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useState } from "react"
 
 
@@ -22,7 +22,7 @@ export const PostDetails = () => {
     return <div className="postBox">
         <div className="postTitle">{post?.title}</div>
         <img className="postImage" src={post?.image_url} alt=""></img>
-        <div className="author">Author: {post?.user?.first_name} {post?.user?.last_name}</div>
+        <Link to={`/users/${post?.user?.id}`} className="author">Author: {post?.user?.first_name} {post?.user?.last_name}</Link>
         <div className="postDate">Publication Date: {post?.publication_date} </div>
         <div className="postCategory"> Category: {post?.category?.label}</div>
         <div>Content: {post?.content} </div>
