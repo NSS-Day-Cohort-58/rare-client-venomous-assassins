@@ -15,7 +15,7 @@ export const UserList = () => {
         {
             users.map(user => {
                 return <section>
-                <Link to={`/users/${user.id}`}>{user?.username}</Link>
+                <Link to={`/users/${user?.id}`}>{user?.username}</Link>
                 <p>{user?.first_name} {user?.last_name}</p>
                 <p>{user?.email}</p>
                 </section>

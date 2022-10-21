@@ -16,7 +16,7 @@ export const CategoryList = () => {
         const newCategory = Object.assign({}, category)
         newCategory.label = event.target.value
         setCategory(newCategory)
-      }
+        }
 
     const newCategory = () => {
         createCategory(category)
