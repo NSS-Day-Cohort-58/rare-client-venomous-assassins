@@ -2,13 +2,18 @@ import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import { getPosts } from "../../managers/PostManager"
+import { getCategories } from "../../managers/CategoryManager"
 
 
 export const Posts = () => {
 
     const [allPosts, setAllPosts] = useState([])
+    const [allCategories, setCategories] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState([])
 
-
+    useEffect(() => {
+        getCategories().then(categoryData => setCategories(categoryData))
+    }, [])
 
     useEffect(
         () => {
@@ -18,6 +23,15 @@ export const Posts = () => {
                 })
         },
         [])
+    
+    document.addEventListener(
+        "change",
+        (changeEvent) => {
+            if (changeEvent.target.id === "category") {
+                setSelectedCategory(changeEvent.target.value)
+        }
+    )
+
 
 //separate module for dropdown function
 //export const Categories
@@ -28,8 +42,22 @@ export const Posts = () => {
 
     return <section>
         <h2>All Posts</h2>
-        <div>
-            <
+        <div className="searchByCategory">
+            {   <>
+                    <h2>Search By Category</h2>
+                    <select id="category">
+                        <option value="0">Select Category</option>
+                        {
+                            allCategories.map(
+                                (category) => {
+                                    return <option selected value="{category.id}">{category.label}</option>
+                                }
+                            )
+                        }
+                    </select>
+            
+                </>
+            }
         </div>
         <div className="postsSection">
             <div>
