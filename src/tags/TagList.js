@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTags, updateTags } from "../managers/Tags";
+import { deleteTag, getTags, updateTags } from "../managers/Tags";
 
 
 export const TagList = () => {
@@ -54,7 +54,7 @@ export const TagList = () => {
                         className="btn btn-primary">
                         Edit
                     </button>
-                    <button>Delete</button>
+                    <button onClick={() => deleteTag(tag).then(() => window.location.reload())}>Delete</button>
                     {
                         !userWantsToEditTag && selectedTag.id == tag.id
                             ? <>
