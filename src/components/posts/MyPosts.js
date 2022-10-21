@@ -1,27 +1,55 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { getPosts } from "../../managers/PostManager"
+import { useNavigate } from "react-router-dom"
+
 
 
 
 export const MyPosts = () => {
-   const [allPosts, setAllPosts] = useState([])
+    const [allPosts, setAllPosts] = useState([])
+    const navigate = useNavigate()
 
-   useEffect(
-    () => {
-        getPosts()
-            .then((allPostsArray) => {
-                setAllPosts(allPostsArray)
+    useEffect(
+        () => {
+            getPosts()
+                .then((allPostsArray) => {
+                    setAllPosts(allPostsArray)
+                })
+        },
+        [])
+
+
+    const deletePost = (evt) => {
+
+        return fetch(`http://localhost:8088/posts/${evt.target.value}`, {
+            method: "DELETE"
+        })
+            .then(() => {
+                fetch(`http://localhost:8088/posts`)
+                    .then(response => response.json())
+                    .then((postArray) => {
+                        setAllPosts(postArray)
+                    })
+
             })
-    },
-    [])
+    }
+
+
+    const toDeleteOrNot = (evt) => {
+        if (window.confirm("Are you sure you want to delete?\n Either Ok or Cancel.") == true) {
+            deletePost(evt);
+        } else {
+            navigate(`/my_posts`);
+        }
+    }
 
     let navigate = useNavigate()
     const localUser = localStorage.getItem("auth_token")
     const userObject = JSON.parse(localUser)
 
     const myPosts = allPosts.filter(post => userObject === post.user_id)
-    
+
 
     if (myPosts.length === 0) {
         return <div>You have no posts created yet!</div>
@@ -47,7 +75,8 @@ export const MyPosts = () => {
                                 navigate(`/edit_post/${postId}`)
                             }
                         }>Edit</button>
-                        <button>Delete</button>
+                        <button value={post.id} className="delete-button" onClick={(clickEvent) => toDeleteOrNot(clickEvent)}
+                        >Delete</button>
                     </li>   
                     }
                 )
