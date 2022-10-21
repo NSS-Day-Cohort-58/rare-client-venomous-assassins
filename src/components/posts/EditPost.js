@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getCategories } from "../../managers/CategoryManager"
 
 
@@ -9,6 +9,7 @@ export const EditPost = () => {
     const [post, setPost] = useState({})
     const [categories, setCategories] = useState([])
   
+    let navigate = useNavigate()
 
     useEffect(
         () => {
@@ -19,6 +20,35 @@ export const EditPost = () => {
         },[postId])
 
 
+    const localUser = localStorage.getItem("auth_token")
+    const userObject = JSON.parse(localUser)
+
+
+    const updatePost = (event) => {
+        event.preventDefault()
+
+        const updatedPostToSendToAPI = {
+            user_id: userObject,
+            category_id: post.category_id,
+            title: post.title,
+            publication_date: post.publication_date,
+            image_url: post.image_url,
+            content: post.content
+        }
+
+        return fetch(`http://localhost:8088/posts/${postId}`, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(updatedPostToSendToAPI)
+        })
+        .then(
+            () => {
+                navigate(`/posts/${postId}`)
+            }
+        )
+    }
 
     return <>
     <form className="newPostForm">
@@ -30,13 +60,26 @@ export const EditPost = () => {
                 type="text"
                 className="form-control"
                 value={post.title}
-              />
+                onChange = {
+                    (evt) => {
+                        const copy = structuredClone(post)
+                        copy.title = evt.target.value
+                        setPost(copy)
+                    }
+                }/>
         </fieldset>
         <fieldset className="formSection">
             <div>
                 <label htmlFor="type">Category: </label>
             </div>
-            <select class="form_select">
+            <select class="form_select" 
+            onChange = {
+                (evt) => {
+                    const copy = structuredClone(post)
+                    copy.category_id = evt.target.value
+                    setPost(copy)
+                }
+            }>
                 <option value="0">{post?.category?.label}</option>
                 {categories.map(
                     (category) => {
@@ -50,10 +93,16 @@ export const EditPost = () => {
             <label htmlFor="publicationDate">Date:</label>
             <input
                 required autoFocus
-                type="date"
+                type="text"
                 className="form-control"
                 value={post.publication_date}
-                />
+                onChange = {
+                    (evt) => {
+                        const copy = structuredClone(post)
+                        copy.publication_date = evt.target.value
+                        setPost(copy)
+                    }
+                }/>
         </fieldset>
         <fieldset className="formSection">
             <label htmlFor="image">Image:</label>
@@ -62,6 +111,13 @@ export const EditPost = () => {
                 type="text"
                 className="form-control"
                 value={post.image_url}
+                onChange = {
+                    (evt) => {
+                        const copy = structuredClone(post)
+                        copy.image_url = evt.target.value
+                        setPost(copy)
+                    }
+                }
                  />
         </fieldset>
         <fieldset className="formSection">
@@ -71,10 +127,21 @@ export const EditPost = () => {
                 type="text"
                 className="form-control"
                 value={post.content}
+                onChange = {
+                    (evt) => {
+                        const copy = structuredClone(post)
+                        copy.content = evt.target.value
+                        setPost(copy)
+                    }                
+                }
                 />
         </fieldset>
-        <button>Update Post
-        </button>
+        <button
+        onClick={
+            (evt) => {
+                updatePost(evt)
+            }
+        }>Update Post</button>
     </form>
     
     
