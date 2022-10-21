@@ -10,7 +10,7 @@ export const UserDetail = () => {
 
     useEffect(
         () => {
-            getUser(userId).then(userData => setUser(userData[1]))
+            getUser(userId).then(userData => setUser(userData))
         },
         [userId])
 
