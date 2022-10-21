@@ -29,7 +29,6 @@ export const EditPost = () => {
                 required autoFocus
                 type="text"
                 className="form-control"
-                
                 value={post.title}
               />
         </fieldset>
