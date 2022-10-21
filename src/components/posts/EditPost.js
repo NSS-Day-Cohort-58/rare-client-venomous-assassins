@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { getCategories } from "../../managers/CategoryManager"
+
 
 export const EditPost = () => {
     let {postId} = useParams()
+
+    const [post, setPost] = useState({})
+    const [categories, setCategories] = useState([])
+  
+
+    useEffect(
+        () => {
+            fetch(`http://localhost:8088/posts/${postId}`)
+                .then(response => response.json())
+                .then(post => setPost(post))
+            getCategories().then(categoryData => setCategories(categoryData))
+        },[postId])
+
+
 
     return <>
     <form className="newPostForm">
@@ -12,30 +29,16 @@ export const EditPost = () => {
                 required autoFocus
                 type="text"
                 className="form-control"
-                placeholder="What's it called?"
+                
                 value={post.title}
-                onChange={
-                    (evt) => {
-                        const copy = structuredClone(post)
-                        copy.title = evt.target.value
-                        setNewPost(copy)
-                    }
-                } />
+              />
         </fieldset>
         <fieldset className="formSection">
             <div>
-                <label htmlFor="type">Category:</label>
+                <label htmlFor="type">Category: </label>
             </div>
-            <select
-                class="form_select"
-                onChange={
-                    (evt) => {
-                        const copy = structuredClone(post)
-                        copy.category_id = evt.target.value
-                        setNewPost(copy)
-                    }
-                }>
-                <option value="0">Choose Category</option>
+            <select class="form_select">
+                <option value="0">{post?.category?.label}</option>
                 {categories.map(
                     (category) => {
                         return <option className="form-option" value={`${category.id}`}>{category.label}</option>
@@ -50,15 +53,8 @@ export const EditPost = () => {
                 required autoFocus
                 type="date"
                 className="form-control"
-                placeholder="What's today's date?"
                 value={post.publication_date}
-                onChange={
-                    (evt) => {
-                        const copy = structuredClone(post)
-                        copy.publication_date = evt.target.value
-                        setNewPost(copy)
-                    }
-                } />
+                />
         </fieldset>
         <fieldset className="formSection">
             <label htmlFor="image">Image:</label>
@@ -66,15 +62,8 @@ export const EditPost = () => {
                 required autoFocus
                 type="text"
                 className="form-control"
-                placeholder="Paste image URL here!"
                 value={post.image_url}
-                onChange={
-                    (evt) => {
-                        const copy = structuredClone(post)
-                        copy.image_url = evt.target.value
-                        setNewPost(copy)
-                    }
-                } />
+                 />
         </fieldset>
         <fieldset className="formSection">
             <label htmlFor="content">Content:</label>
@@ -82,20 +71,10 @@ export const EditPost = () => {
                 required autoFocus
                 type="text"
                 className="form-control"
-                placeholder="Tell me about it!"
                 value={post.content}
-                onChange={
-                    (evt) => {
-                        const copy = structuredClone(post)
-                        copy.content = evt.target.value
-                        setNewPost(copy)
-                    }
-                } />
+                />
         </fieldset>
-        <button
-            onClick={(clickEvent) => saveButton(clickEvent)}
-            className="save_button">
-            Submit New Post
+        <button>Update Post
         </button>
     </form>
     
