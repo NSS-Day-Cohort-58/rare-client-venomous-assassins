@@ -6,6 +6,8 @@ export const TagList = () => {
 
     const [tags, setTags] = useState([])
     const [tag, setTag] = useState({})
+    const [userWantsToEditTag, setTagToEdit] = useState([false])
+    const [selectedTag, setSelectedTag] = useState([])
     
 
     useEffect(() => {
@@ -18,10 +20,10 @@ export const TagList = () => {
         setTag(newTag)
       }
     
-    const editTag = () => {
+    const editTag = (selectedTag) => {
 
         updateTags({
-            id: tag.id,
+            id: selectedTag.id,
             label: tag.label
         })
             .then(() => {
@@ -34,30 +36,7 @@ export const TagList = () => {
 
 
 
-        return <>
-            <form className="tagForm">
-                <h2 className="tagForm_label">{"Edit Tag"}</h2>
-                <fieldset>
-                <div className="form-group">
-                    <label htmlFor="label"></label>
-                    <input type="text" name="label" required autoFocus className="form-control"
-                    placeholder="Tag"
-                    defaultValue={tag.label}
-                    onChange={handleControlledInputChange}
-                    />
-                </div>
-                </fieldset>
-                <button type="submit"
-                    onClick={evt => {
-                        evt.preventDefault()
-                        editTag()
-                }}
-                className="btn btn-primary">
-                {"Save"}
-              </button>
-            </form>
-        </>
-            
+        
     }
 
     return <>
@@ -68,11 +47,42 @@ export const TagList = () => {
                 (tag) => <>
                     <div>{tag.label}</div>
                     <button
-                        onClick={(clickEvent) => handleSaveButtonClick(clickEvent)}
+                        onClick={() => {
+                            setTagToEdit(!userWantsToEditTag)
+                            setSelectedTag(tag)
+                        }}
                         className="btn btn-primary">
                         Edit
                     </button>
                     <button>Delete</button>
+                    {
+                        !userWantsToEditTag && selectedTag.id == tag.id
+                            ? <>
+                            <form className="tagForm">
+                                <h2 className="tagForm_label">{"Edit Tag"}</h2>
+                                <fieldset>
+                                <div className="form-group">
+                                    <label htmlFor="label"></label>
+                                    <input type="text" name="label" required autoFocus className="form-control"
+                                    placeholder="Tag"
+                                    defaultValue={tag.label}
+                                    onChange={handleControlledInputChange}
+                                    />
+                                </div>
+                                </fieldset>
+                                <button type="submit"
+                                    onClick={evt => {
+                                        evt.preventDefault()
+                                        editTag(selectedTag)
+                                }}
+                                className="btn btn-primary">
+                                {"Save"}
+                              </button>
+                            </form>
+                        </>
+                        : <></>
+                            
+                    }
                 </>
                 )
         }
