@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { getPosts } from "../../managers/PostManager"
-import { useNavigate } from "react-router-dom"
+
 
 
 
@@ -55,30 +55,32 @@ export const MyPosts = () => {
     }
     else {
         return <section>
-            <h2>My Posts</h2>
-            <div className="postsSection">
-                {
-                    myPosts.map(
-                        (post) => {
-                            return <li className="postBox">
-                                <img className="postPic" src={post.image_url} width="600px" alt=""></img>
-                                <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
-                                <div className="postInfo">
-                                    <p>Author: {post.user.first_name} {post.user.last_name}</p>
-                                    <p>Category: {post.category.label}</p>
-                                </div>
-                                <button>Edit</button>
-                                <button
-                                    value={post.id}
-                                    onClick={(clickEvent) => toDeleteOrNot(clickEvent)}
-                                    className="delete-button">
-                                    Delete
-                                </button>
-                            </li>
-                        }
-                    )
-                }
-            </div>
-        </section>
+        <h2>My Posts</h2>
+        <div className = "postsSection">
+            {
+                myPosts.map(
+                    (post) => {
+                        return <li className="postBox">
+                        <img className="postPic" src={post.image_url} width="600px" alt=""></img>
+                        <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
+                        <div className="postInfo">
+                            <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                            <p>Category: {post.category.label}</p>
+                        </div>
+                        <button id={post.id}
+                        onClick = {
+                            (evt) => {
+                                let postId = evt.target.id
+                                navigate(`/edit_post/${postId}`)
+                            }
+                        }>Edit</button>
+                        <button value={post.id} className="delete-button" onClick={(clickEvent) => toDeleteOrNot(clickEvent)}
+                        >Delete</button>
+                    </li>   
+                    }
+                )
+            }
+        </div>
+    </section>
     }
 }

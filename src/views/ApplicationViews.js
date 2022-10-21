@@ -9,6 +9,7 @@ import { TagList } from "../tags/TagList"
 import { MyPosts } from "../components/posts/MyPosts"
 import { TagManager } from "../tags/TagManager"
 import { HomePosts } from "../components/posts/HomePosts"
+import { EditPost } from "../components/posts/EditPost"
 import { PostForm } from "../components/posts/postForm"
 import { PostDetails } from "../components/posts/postDetails"
 
@@ -22,11 +23,11 @@ export const ApplicationViews = ({ token, setToken }) => {
       <Route path="/posts" element={<Posts />} />
       <Route path="/users" element={<UserList setToken={setToken} />} />
       <Route path="/categories" element={<CategoryList />} />
-      <Route path="/my_posts" element={<MyPosts />} />
-      <Route path="/" element={<HomePosts />} />
+      <Route path="/my_posts" element={<MyPosts/>} />
+      <Route path="/edit_post/:postId" element={<EditPost/>} />
       <Route path="/postForm" element={<PostForm />} />
       <Route path="/posts/:postId" element={<PostDetails />} />
-
+      <Route path="/" element={<HomePosts/>} />
       <Route element={<Authorized token={token} />}>
 
         {/* Add Routes here */}
