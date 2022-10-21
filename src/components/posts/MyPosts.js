@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { getPosts } from "../../managers/PostManager"
-import { useNavigate } from "react-router-dom"
+
 
 
 
@@ -44,7 +44,6 @@ export const MyPosts = () => {
         }
     }
 
-    let navigate = useNavigate()
     const localUser = localStorage.getItem("auth_token")
     const userObject = JSON.parse(localUser)
 
