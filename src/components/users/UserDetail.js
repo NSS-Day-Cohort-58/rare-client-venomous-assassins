@@ -10,11 +10,12 @@ export const UserDetail = () => {
 
     useEffect(
         () => {
-            getUser(userId).then(userData => setUser(userData))
+            getUser(userId).then(userData => setUser(userData[1]))
         },
         [userId])
 
     return <div className="userDiv">
+        <div className="user-photo"><img src={user?.profile_image_url} alt="image"></img></div>
         <div className="user-name">Name: {user?.first_name} {user?.last_name}</div>
         <div className="user-username">Username: {user?.username} </div>
         <div className="user-date">Creation Date: {user?.creation_date} </div>
