@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { getUsers } from "../../managers/UserManager"
 
 export const UserList = () => {
@@ -14,9 +15,9 @@ export const UserList = () => {
         {
             users.map(user => {
                 return <section>
-                <h3>{user.username}</h3>
-                <p>{user.first_name} {user.last_name}</p>
-                <p>{user.email}</p>
+                <Link to={`/users/${user.id}`}>{user?.username}</Link>
+                <p>{user?.first_name} {user?.last_name}</p>
+                <p>{user?.email}</p>
                 </section>
             })
         }

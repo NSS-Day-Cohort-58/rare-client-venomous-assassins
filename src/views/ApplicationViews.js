@@ -11,6 +11,7 @@ import { TagManager } from "../tags/TagManager"
 import { HomePosts } from "../components/posts/HomePosts"
 import { PostForm } from "../components/posts/postForm"
 import { PostDetails } from "../components/posts/postDetails"
+import { UserDetail } from "../components/users/UserDetail"
 
 export const ApplicationViews = ({ token, setToken }) => {
   return <>
@@ -26,6 +27,7 @@ export const ApplicationViews = ({ token, setToken }) => {
       <Route path="/" element={<HomePosts />} />
       <Route path="/postForm" element={<PostForm />} />
       <Route path="/posts/:postId" element={<PostDetails />} />
+      <Route path="/users/:userId" element={<UserDetail />} />
 
       <Route element={<Authorized token={token} />}>
 
