@@ -7,6 +7,7 @@ export const PostForm = () => {
 
 
     const navigate = useNavigate()
+
     const [categories, setCategories] = useState([])
     const [post, setNewPost] = useState({
         user_id: "",
@@ -42,19 +43,8 @@ export const PostForm = () => {
         },
         []
     )
-
-
-    const createPost = (postObject) => {
-        return fetch("http://localhost:8088/posts", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(postObject)
-        })
-            .then(response => response.json())
-    }
-
+    
+    let postId = null
 
     const saveButton = (event) => {
         event.preventDefault()
@@ -82,24 +72,27 @@ export const PostForm = () => {
             .then(response => response.json())
             .then(updatedPost =>{
 
+                postId = updatedPost.id
+                
                 checked.map(check => {
-                    const postTagsToSentToAPI = {
+                    const postTagsToSendToAPI = {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8088/poststags", { //make response on server side to this 
+                    return fetch("http://localhost:8088/post_tags", { 
                         method: "POST", 
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify(postTagsToSentToAPI)
+                        body: JSON.stringify(postTagsToSendToAPI)
                     })    
+                    .then(response => response.json())
                 })
             })
-            .then(response =>response.json())
-            .then(updatedPost => navigate(`/comments/${updatedPost.id}`))
+            .then(() => {
+                navigate(`/posts/${postId}`)
+            })
 
-        
         
     }
 
