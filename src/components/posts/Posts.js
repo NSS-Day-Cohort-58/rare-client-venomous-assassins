@@ -52,6 +52,23 @@ export const Posts = () => {
                 setSelectedPosts(allPosts)
             }},
         [selectedCategory])
+
+    useEffect(
+        () => {
+            let selectedPostsArray = []
+            if (selectedCategory !== 0) {
+                allPosts.map(
+                    (post) => {
+                        if (selectedCategory === post.category_id) {
+                            selectedPostsArray.push(post)
+                        }
+                    }
+                    )
+                    setSelectedPosts(selectedPostsArray)
+            } else {
+                setSelectedPosts(allPosts)
+            }},
+        [allPosts])
             
     
     let handleCategoryChange = (e) => {
