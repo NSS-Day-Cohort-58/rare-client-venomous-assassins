@@ -18,11 +18,7 @@ export const Posts = () => {
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
     }, [])
-
-    useEffect(() => {
-        setSelectedCategory(0)
-    }, [])
-
+    
     useEffect(
         () => {
             getPosts()
@@ -31,6 +27,10 @@ export const Posts = () => {
                 })
         },
         [])
+        
+    useEffect(() => {
+        setSelectedCategory(0)
+    }, [])
 
     
     //state to hold all posts
@@ -70,11 +70,11 @@ export const Posts = () => {
         <h2>All Posts</h2>
         <div className="category">
             {/* Displaying the value of fruit */}
-            {selectedCategory}
+            
             <br />
 
             <select onChange={handleCategoryChange}> 
-                <option value={0}>Select a Category</option>
+                <option value={0}>Search by Category</option>
                         {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
                     */}
