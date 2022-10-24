@@ -87,6 +87,13 @@ export const PostForm = () => {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
+                    return fetch("http://localhost:8088/poststags", { //make response on server side to this 
+                        method: "POST", 
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(postTagsToSentToAPI)
+                    })    
                 })
             })
             .then(response =>response.json())
