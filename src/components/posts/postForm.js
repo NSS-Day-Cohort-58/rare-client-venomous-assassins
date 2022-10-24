@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import { getTags } from "../../managers/Tags"
 
 export const PostForm = () => {
 
@@ -15,6 +16,16 @@ export const PostForm = () => {
         image_url: "",
         content: "",
     })
+    const [tags, setTags] = useState([])
+
+
+    const [checkedState, setCheckedState] = useState(
+        new Array(tags.length).fill(false)
+    )
+   
+    const handleOnChange = () => {
+        setCheckedState(!checkedState)
+    }
 
     useEffect(
         () => {
@@ -23,6 +34,7 @@ export const PostForm = () => {
                 .then((categoryArray) => {
                     setCategories(categoryArray)
                 })
+            getTags().then(tagData => setTags(tagData))
         },
         []
     )
@@ -148,6 +160,20 @@ export const PostForm = () => {
                         setNewPost(copy)
                     }
                 } />
+        </fieldset>
+        <fieldset>
+            {
+                tags.map(tag => <>
+                <input type="checkbox" id="tag" name="tag" 
+                onChange = {
+                    () => {
+                        handleOnChange()
+                    }
+                }/>
+                <label htmlFor="tag" value={tag.id}>{tag.label}</label>
+                </>
+                )
+            }
         </fieldset>
         <button
             onClick={(clickEvent) => saveButton(clickEvent)}
