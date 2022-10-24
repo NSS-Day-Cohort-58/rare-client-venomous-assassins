@@ -19,12 +19,16 @@ export const PostForm = () => {
     const [tags, setTags] = useState([])
 
 
-    const [checkedState, setCheckedState] = useState(
-        new Array(tags.length).fill(false)
-    )
+   const [checked, setChecked] = useState([])
    
-    const handleOnChange = () => {
-        setCheckedState(!checkedState)
+    const handleCheck = (event) => {
+        let updatedList = [...checked]
+        if (event.target.checked) {
+            updatedList = [...checked, event.target.value]
+        } else {
+            updatedList.splice(checked.indexOf(event.target.value), 1)
+        }
+        setChecked(updatedList)
     }
 
     useEffect(
@@ -68,8 +72,28 @@ export const PostForm = () => {
 
         }
 
-        createPost(postToSendToAPI)
-            .then(newPost => navigate(`/comments/${newPost.id}`))
+        return fetch("http://localhost:8088/posts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postToSendToAPI)
+        })
+            .then(response => response.json())
+            .then(updatedPost =>{
+
+                checked.map(check => {
+                    const postTagsToSentToAPI = {
+                        post_id: updatedPost.id,
+                        tag_id: parseInt(check)
+                    }
+                })
+            })
+            .then(response =>response.json())
+            .then(updatedPost => navigate(`/comments/${updatedPost.id}`))
+
+        
+        
     }
 
 
@@ -164,10 +188,10 @@ export const PostForm = () => {
         <fieldset>
             {
                 tags.map(tag => <>
-                <input type="checkbox" id="tag" name="tag" 
+                <input type="checkbox" id="tag" name="tag" value={tag.id}
                 onChange = {
-                    () => {
-                        handleOnChange()
+                    (evt) => {
+                        handleCheck(evt)
                     }
                 }/>
                 <label htmlFor="tag" value={tag.id}>{tag.label}</label>
