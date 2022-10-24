@@ -10,6 +10,8 @@ export const PostDetails = () => {
 
     const [post, setPost] = useState({})
 
+    const [postTags, setPostTags] = useState([])
+
 
     useEffect(
         () => {
@@ -18,6 +20,13 @@ export const PostDetails = () => {
                 .then((postObject) => {
                     setPost(postObject)
                 })
+            .then(() => 
+            fetch(`http://localhost:8088/post_tags?post_id=${postId}`)
+                .then(response => response.json())
+            )
+            .then(postTagsArray => {
+                setPostTags(postTagsArray)
+            })
         },
         [postId])
 
@@ -28,6 +37,11 @@ export const PostDetails = () => {
         <div className="postDate">Publication Date: {post?.publication_date} </div>
         <div className="postCategory"> Category: {post?.category?.label}</div>
         <div>Content: {post?.content} </div>
+        <div>
+            {
+                postTags.map(tag => <div className="tag">{tag.tag.label}</div>)
+            }
+        </div>
         <button
             value={post.id}
             onClick={(clickEvent) => navigate(`/comments/${post.id}`)}
@@ -38,5 +52,8 @@ export const PostDetails = () => {
             onClick={(clickEvent) => navigate(`/addComment/${post.id}`)}
             className="add-button"
         >Add Comment</button>
+
     </div>
 }
+
+//work on displaying tags selected
