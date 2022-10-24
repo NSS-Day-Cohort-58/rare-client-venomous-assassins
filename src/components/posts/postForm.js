@@ -69,7 +69,7 @@ export const PostForm = () => {
         }
 
         createPost(postToSendToAPI)
-            .then(newPost => navigate(`/posts/${newPost.id}`))
+            .then(newPost => navigate(`/comments/${newPost.id}`))
     }
 
 
