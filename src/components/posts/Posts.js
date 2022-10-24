@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react"
 import { getPosts } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
+import { getUsers } from "../../managers/UserManager"
 
 
 
@@ -12,25 +13,25 @@ export const Posts = () => {
     const [allPosts, setAllPosts] = useState([])
     const [allCategories, setCategories] = useState([])
     const [selectedPosts, setSelectedPosts] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState()
+    const [selectedCategory, setSelectedCategory] = useState(0)
+    const [allUsers, setAllUsers] = useState([])
+    const [selectedUser, setSelectedUser] = useState(0)
     
 
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
+        getPosts()
+        .then((allPostsArray) => {
+            setAllPosts(allPostsArray)
+        })
+        getUsers()
+                .then((allUsersArray) => {
+                    setAllUsers(allUsersArray)
+                })
     }, [])
     
-    useEffect(
-        () => {
-            getPosts()
-                .then((allPostsArray) => {
-                    setAllPosts(allPostsArray)
-                })
-        },
-        [])
         
-    useEffect(() => {
-        setSelectedCategory(0)
-    }, [])
+   
 
     
     //state to hold all posts
@@ -40,6 +41,7 @@ export const Posts = () => {
         () => {
             let selectedPostsArray = []
             if (selectedCategory !== 0) {
+                setSelectedUser(0)
                 allPosts.map(
                     (post) => {
                         if (selectedCategory === post.category_id) {
@@ -56,6 +58,24 @@ export const Posts = () => {
     useEffect(
         () => {
             let selectedPostsArray = []
+            if (selectedUser !== 0) {
+                setSelectedCategory(0)
+                allPosts.map(
+                    (post) => {
+                        if (selectedUser === post.user_id) {
+                            selectedPostsArray.push(post)
+                        }
+                    }
+                    )
+                    setSelectedPosts(selectedPostsArray)
+            } else {
+                setSelectedPosts(allPosts)
+            }},
+        [selectedUser])
+
+    useEffect(
+        () => {
+            let selectedPostsArray = []
             if (selectedCategory !== 0) {
                 allPosts.map(
                     (post) => {
@@ -65,8 +85,18 @@ export const Posts = () => {
                     }
                     )
                     setSelectedPosts(selectedPostsArray)
+            } else if (selectedUser !== 0) {
+                allPosts.map(
+                    (post) => {
+                        if (selectedUser === post.user_id) {
+                            selectedPostsArray.push(post)
+                        }
+                    }
+                    )
+                    setSelectedPosts(selectedPostsArray)
             } else {
-                setSelectedPosts(allPosts)
+                    setSelectedPosts(allPosts)
+                    
             }},
         [allPosts])
             
@@ -74,6 +104,9 @@ export const Posts = () => {
     let handleCategoryChange = (e) => {
         setSelectedCategory(parseInt(e.target.value))
     }        
+    let handleAuthorChange = (e) => {
+        setSelectedUser(e.target.value)
+    }
 
 
 //separate module for dropdown function
@@ -96,6 +129,19 @@ export const Posts = () => {
                     and returning an option element with the appropriate attributes / values.
                     */}
                 {allCategories.map((category) => <option value={category.id}>{category.label}</option>)}
+            </select>
+        </div>
+        <div className="author">
+            {/* Displaying the value of fruit */}
+            
+            <br />
+
+            <select onChange={handleAuthorChange}> 
+                <option value={0}>Search by Author</option>
+                        {/* Mapping through each fruit object in our fruits array
+                    and returning an option element with the appropriate attributes / values.
+                    */}
+                {allUsers.map((user) => <option value={user.id}>{user.username}</option>)}
             </select>
         </div>
         <div className="postsSection">
