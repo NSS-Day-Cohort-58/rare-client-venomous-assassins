@@ -9,6 +9,7 @@ export const Posts = () => {
 
     const [allPosts, setAllPosts] = useState([])
     const [allCategories, setCategories] = useState([])
+    const [selectedPosts, setSelectedPosts] = useState([])
     const [selectedCategory, setSelectedCategory] = useState([])
 
     useEffect(() => {
@@ -23,12 +24,38 @@ export const Posts = () => {
                 })
         },
         [])
+    //state to hold all posts
+    //state to hold filtered posts
+    useEffect(
+        () => {
+            selectedPosts
+            ?
+            setAllPosts(selectedPosts)
+            :
+            setAllPosts(allPosts)
+        },
+    [selectedPosts])
+
+    useEffect(
+        () => {
+            let selectedPostsArray = []
+            allPosts.map(
+                (post) => {
+                    if (selectedCategory === post.category_id) {
+                        selectedPostsArray.push(post)
+                    }
+                }
+            )
+            setSelectedPosts(selectedPostsArray)
+        },
+    [selectedCategory])
     
     document.addEventListener(
         "change",
         (changeEvent) => {
             if (changeEvent.target.id === "category") {
-                setSelectedCategory(changeEvent.target.value)
+                setSelectedCategory(parseInt(changeEvent.target.value))
+            }
         }
     )
 
@@ -50,7 +77,7 @@ export const Posts = () => {
                         {
                             allCategories.map(
                                 (category) => {
-                                    return <option selected value="{category.id}">{category.label}</option>
+                                    return <option selected value={category.id}>{category.label}</option>
                                 }
                             )
                         }
@@ -61,7 +88,7 @@ export const Posts = () => {
         </div>
         <div className="postsSection">
             <div>
-                {
+                {   
                     allPosts.map((post) => {
                         return <li className="postBox">
                             <img className="postPic" src={post.image_url} width="600px" alt=""></img>
