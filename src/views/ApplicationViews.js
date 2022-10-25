@@ -19,6 +19,7 @@ import { AddComment } from "../components/posts/postAddComment"
 export const ApplicationViews = ({ token, setToken }) => {
   return <>
     <Routes>
+      <Route path="/" element={<HomePosts />} />
       <Route path="/tags" element={<TagManager />} />
       <Route path="/tags" element={<TagList />} />
       <Route path="/login" element={<Login setToken={setToken} />} />
