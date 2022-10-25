@@ -15,9 +15,12 @@ export const EditPost = () => {
     const [tags, setTags] = useState([])
     const [postTags, setPostTags] = useState([])
 
-    const [checked, setChecked] = useState([])
+    const [checked, setChecked] = useState(false)
+    const handleChange = () => {
+        setChecked(!checked)
+    }
 
-    const handleCheck = (event) => {
+    /*const handleCheck = (event) => {
         let updatedList = [...checked]
         if (event.target.checked) {
             updatedList = [...checked, event.target.value]
@@ -26,6 +29,29 @@ export const EditPost = () => {
         }
         setChecked(updatedList)
     }
+*/
+    /*const matchingId = (id) => {
+
+        let idArray = []
+
+        postTags.map((postTag) => {
+            if (postTag.tag_id === id) {
+                idArray.push(postTag.tag_id)
+            }
+        }
+        )
+
+        if (idArray.length > 0) {
+            return true
+        }
+
+        else {
+            return false
+        }
+        
+    }*/
+
+
 
     useEffect(
         () => {
@@ -72,26 +98,7 @@ export const EditPost = () => {
         )
     }
 
-    const matchingId = (id) => {
-
-        let idArray = []
-
-        postTags.map((postTag) => {
-            if (postTag.tag_id === id) {
-                idArray.push(postTag.tag_id)
-            }
-        }
-        )
-
-        if (idArray.length > 0) {
-            return true
-        }
-
-        else {
-            return false
-        }
-        
-    }
+    
 
     return <>
     <form className="newPostForm">
@@ -183,10 +190,10 @@ export const EditPost = () => {
             {
                 tags.map(tag => <>
                 <input type="checkbox" id="tag" name="tag" 
-                value={tag.id} checked={matchingId(tag.id)? "checked": ""}
+                value={tag.id} checked={checked ? "checked": ""}
                 onChange = {
-                    (evt) => {
-                        handleCheck(evt)
+                    () => {
+                        handleChange()
                     }
                 }/>
                 <label htmlFor="tag" value={tag.id}>{tag.label}</label>
@@ -205,4 +212,11 @@ export const EditPost = () => {
 }
 
 
+
+/**
+ * the checked needs to be able to toggle between true and false depending on if that box is checked or not
+ * need an array with ids that have been checked and set those to true, however, if clicked on, will set those ids to false
+ * so the onchange will set from true to false or false to true (toggle)
+ * need a function that goes through the tags array and sets its value to true if a matching id is found in the posttags otherwise sets its value to false
+ */
 
