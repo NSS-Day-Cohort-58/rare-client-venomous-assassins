@@ -43,7 +43,8 @@ export const HomePosts = () => {
 
     if(doneLoading && filteredPosts.length > 0){
         return (
-            <>                   
+            <> 
+            <h3>Posts from author subscriptions:</h3>                  
             {   
             filteredPosts.map((post) => {
                 return <li className="postBox">
