@@ -1,9 +1,10 @@
 import React, { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { getPosts, getPostsByCategory, getPostsByUser } from "../../managers/PostManager"
+import { getPosts, getPostsByCategory, getPostsByTag, getPostsByUser } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
 import { getUsers } from "../../managers/UserManager"
+import { getTags } from "../../managers/Tags"
 
 
 
@@ -11,14 +12,17 @@ import { getUsers } from "../../managers/UserManager"
 export const Posts = () => {
 
     const [allPosts, setAllPosts] = useState([])
+    const [allTags, setAllTags] = useState([])
     const [allCategories, setCategories] = useState([])
     const [selectedPosts, setSelectedPosts] = useState([])
     const [allUsers, setAllUsers] = useState([])
     
     
+    
 
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
+        getTags().then(tagData => setAllTags(tagData))
         getPosts()
         .then((allPostsArray) => {
             setAllPosts(allPostsArray)
@@ -31,16 +35,22 @@ export const Posts = () => {
     }, [])
    
     
-    let handleCategoryChange = (e) => {
-        getPostsByCategory(parseInt(e.target.value))
+    let handleCategoryChange = (event) => {
+        getPostsByCategory(event.target.value)
             .then(postsByCategoryArray => {
                 setSelectedPosts(postsByCategoryArray)
             })
     }        
     let handleAuthorChange = (a) => {
-        getPostsByUser(parseInt(a.target.value))
+        getPostsByUser(a.target.value)
             .then(postsByUserArray => {
                 setSelectedPosts(postsByUserArray)
+            })
+    }
+    let handleTagChange = (a) => {
+        getPostsByTag(a.target.value)
+            .then(postsByTagArray => {
+                setSelectedPosts(postsByTagArray)
             })
     }
 
@@ -56,6 +66,12 @@ export const Posts = () => {
             <select onChange={handleAuthorChange}> 
                 <option value={0}>Search by Author</option>
                 {allUsers.map((user) => <option value={user.id}>{user.username}</option>)}
+            </select>
+        </div>
+        <div className="tag">
+            <select onChange={handleTagChange}> 
+                <option value={0}>Search by Tag</option>
+                {allTags.map((tag) => <option value={tag.id}>{tag.label}</option>)}
             </select>
         </div>
         <div className="postsSection">

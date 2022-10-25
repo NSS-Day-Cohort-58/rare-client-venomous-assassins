@@ -5,11 +5,16 @@ export const getPosts = () => {
         .then(response => response.json())
 }
 
-export const getPostsByCategory = (categoryId) => {
-    return fetch(`http://localhost:8088/posts?category_id=${categoryId}`)
+export const getPostsByCategory = (category_id) => {
+    return fetch(`http://localhost:8088/posts?category_id=${category_id}`)
         .then(response => response.json())
 }
 
-export const getPostsByUser = (userId) => {
-    return fetch(`http://localhost:8088/posts?user_id=${userId}`)
+export const getPostsByUser = (user_id) => {
+    return fetch(`http://localhost:8088/posts?user_id=${user_id}`)
+        .then(response => response.json())
+}
+export const getPostsByTag = (tag_id) => {
+    return fetch(`http://localhost:8088/posts?tag_id=${tag_id}`)
+        .then(res => res.json())
 }
