@@ -15,21 +15,28 @@ export const EditPost = () => {
     const [tags, setTags] = useState([])
     const [postTags, setPostTags] = useState([])
 
-    const [checked, setChecked] = useState(false)
-    const handleChange = () => {
-        setChecked(!checked)
-    }
+    const [checkedTags, setCheckedTags] = useState([])
+    
+    /*useEffect(
+        () => {
+            postTags.map((postTag) => {
+                 tags.map((tag) => {
+                    if (postTag.tag_id === tag.id) {
+                        tag.isChecked = true
+                    }
+                    else {
+                        tag.isChecked = false
+                    }
+                })
+            })
+            setTags(tags)
+        },
+        [categories]
+    )*/
+        
 
-    /*const handleCheck = (event) => {
-        let updatedList = [...checked]
-        if (event.target.checked) {
-            updatedList = [...checked, event.target.value]
-        } else {
-            updatedList.splice(checked.indexOf(event.target.value), 1)
-        }
-        setChecked(updatedList)
-    }
-*/
+
+
     /*const matchingId = (id) => {
 
         let idArray = []
@@ -42,7 +49,7 @@ export const EditPost = () => {
         )
 
         if (idArray.length > 0) {
-            return true
+            return true‰
         }
 
         else {
@@ -50,8 +57,6 @@ export const EditPost = () => {
         }
         
     }*/
-
-
 
     useEffect(
         () => {
@@ -62,10 +67,23 @@ export const EditPost = () => {
                 .then(response =>response.json())
                 .then(thisPostsTags => {
                     setPostTags(thisPostsTags)
-                }) 
             getCategories().then(categoryData => setCategories(categoryData))
-            getTags().then(tagData => setTags(tagData))
-        },[postId])
+            getTags().then((tagData) => {postTags.map((postTag) => {
+                tagData.map((tag) => {
+                   if (postTag.tag_id === tag.id) {
+                       tag.isChecked = true
+                   }
+                   else {
+                       tag.isChecked = false
+                   }
+               })
+           })
+
+           setTags(tagData)})
+        }) 
+            
+        },
+        [postId])
 
 
     const localUser = localStorage.getItem("auth_token")
@@ -190,12 +208,20 @@ export const EditPost = () => {
             {
                 tags.map(tag => <>
                 <input type="checkbox" id="tag" name="tag" 
-                value={tag.id} checked={checked ? "checked": ""}
+                value={tag.id} checked={tag.isChecked? "checked": ""}
                 onChange = {
                     () => {
-                        handleChange()
+                        const copy = structuredClone(tags)
+                        {
+                            tag.isChecked
+                            ? tag.isChecked = false
+                            : tag.isChecked = true
+                        }
+                        setTags(copy)
                     }
-                }/>
+                }
+                    
+                />
                 <label htmlFor="tag" value={tag.id}>{tag.label}</label>
                 </>
                 )
@@ -213,10 +239,4 @@ export const EditPost = () => {
 
 
 
-/**
- * the checked needs to be able to toggle between true and false depending on if that box is checked or not
- * need an array with ids that have been checked and set those to true, however, if clicked on, will set those ids to false
- * so the onchange will set from true to false or false to true (toggle)
- * need a function that goes through the tags array and sets its value to true if a matching id is found in the posttags otherwise sets its value to false
- */
 
