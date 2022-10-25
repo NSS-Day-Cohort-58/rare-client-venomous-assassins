@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getCategories } from "../../managers/CategoryManager"
+import { getTags } from "../../managers/Tags"
 
 
 export const EditPost = () => {
@@ -11,19 +12,40 @@ export const EditPost = () => {
   
     let navigate = useNavigate()
 
+    const [tags, setTags] = useState([])
+    const [postTags, setPostTags] = useState([])
+
+    const [checked, setChecked] = useState([])
+
+    const handleCheck = (event) => {
+        let updatedList = [...checked]
+        if (event.target.checked) {
+            updatedList = [...checked, event.target.value]
+        } else {
+            updatedList.splice(checked.indexOf(event.target.value), 1)
+        }
+        setChecked(updatedList)
+    }
+
     useEffect(
         () => {
             fetch(`http://localhost:8088/posts/${postId}`)
                 .then(response => response.json())
                 .then(post => setPost(post))
+            .then(() => fetch(`http://localhost:8088/post_tags?post_id=${postId}`))
+                .then(response =>response.json())
+                .then(thisPostsTags => {
+                    setPostTags(thisPostsTags)
+                }) 
             getCategories().then(categoryData => setCategories(categoryData))
+            getTags().then(tagData => setTags(tagData))
         },[postId])
 
 
     const localUser = localStorage.getItem("auth_token")
     const userObject = JSON.parse(localUser)
 
-
+    
     const updatePost = (event) => {
         event.preventDefault()
 
@@ -48,6 +70,27 @@ export const EditPost = () => {
                 navigate(`/posts/${postId}`)
             }
         )
+    }
+
+    const matchingId = (id) => {
+
+        let idArray = []
+
+        postTags.map((postTag) => {
+            if (postTag.tag_id === id) {
+                idArray.push(postTag.tag_id)
+            }
+        }
+        )
+
+        if (idArray.length > 0) {
+            return true
+        }
+
+        else {
+            return false
+        }
+        
     }
 
     return <>
@@ -136,6 +179,21 @@ export const EditPost = () => {
                 }
                 />
         </fieldset>
+        <fieldset>
+            {
+                tags.map(tag => <>
+                <input type="checkbox" id="tag" name="tag" 
+                value={tag.id} checked={matchingId(tag.id)? "checked": ""}
+                onChange = {
+                    (evt) => {
+                        handleCheck(evt)
+                    }
+                }/>
+                <label htmlFor="tag" value={tag.id}>{tag.label}</label>
+                </>
+                )
+            }
+        </fieldset>
         <button
         onClick={
             (evt) => {
@@ -143,7 +201,8 @@ export const EditPost = () => {
             }
         }>Update Post</button>
     </form>
-    
-    
     </>
 }
+
+
+
