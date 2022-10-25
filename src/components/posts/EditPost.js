@@ -13,6 +13,7 @@ export const EditPost = () => {
     let navigate = useNavigate()
 
     const [tags, setTags] = useState([])
+    const [originalTags, setOriginalTags] = useState([])
     const [postTags, setPostTags] = useState([])
     const [doneLoading, setLoading] = useState(false)
 
@@ -78,22 +79,33 @@ export const EditPost = () => {
 
         useEffect(
             () => {
-                let newTagsArray = []
+
                 getTags().then((tagData) => {
-                    postTags.map((postTag) => {
-                        newTagsArray = tagData.map((tag) => {
-                            if (postTag.tag_id === tag.id) {
-                                tag.isChecked = true
-                                return tag
+                    let newTagsArray = []
+                    for (const tag of tagData) {
+                        if(postTags){
+                            for (const postTag of postTags) {
+                                
+                                if (postTag.tag_id === tag.id) {
+                                    tag.isChecked = true
+                                    tag.postTagId = postTag.id
+                                    break
+                                }
+                                else {
+                                    tag.isChecked = false
+                                    tag.postTagId = postTag.id
+                                }
                             }
-                            else {
-                                tag.isChecked = false
-                                return tag
-                            }
-                    })
-                })
-    
-               setTags(newTagsArray)})
+                            newTagsArray.push(tag)
+                        } else {
+                            tag.isChecked = false
+                            tag.postTagId = null
+                            newTagsArray.push(tag)
+                        }
+                    }
+                
+               setTags(newTagsArray)
+               setOriginalTags(newTagsArray)})
                 
             },
             [doneLoading])
@@ -113,6 +125,32 @@ export const EditPost = () => {
             publication_date: post.publication_date,
             image_url: post.image_url,
             content: post.content
+        }
+
+        if(originalTags !== tags){
+            for (const tag of tags) {
+                let foundPostTag = postTags.find(pt => {
+                    return pt.post_id === parseInt(postId) && pt.tag_id === tag.id
+                })
+                if(!foundPostTag && tag.isChecked){
+                    let postTagsToSendToAPI = {
+                        post_id: postId,
+                        tag_id: tag.id
+                    }
+                    fetch("http://localhost:8088/post_tags", { 
+                        method: "POST", 
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(postTagsToSendToAPI)
+                    })    
+                    .then(response => response.json())
+                } else if (tag.isChecked === false && foundPostTag){
+                    fetch(`http://localhost:8088/post_tags/${tag.postTagId}`, {
+                        method: "DELETE"
+                    })
+                }
+            }
         }
 
         return fetch(`http://localhost:8088/posts/${postId}`, {
