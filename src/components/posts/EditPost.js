@@ -14,6 +14,7 @@ export const EditPost = () => {
 
     const [tags, setTags] = useState([])
     const [postTags, setPostTags] = useState([])
+    const [doneLoading, setLoading] = useState(false)
 
     const [checkedTags, setCheckedTags] = useState([])
     
@@ -67,23 +68,35 @@ export const EditPost = () => {
                 .then(response =>response.json())
                 .then(thisPostsTags => {
                     setPostTags(thisPostsTags)
-            getCategories().then(categoryData => setCategories(categoryData))
-            getTags().then((tagData) => {postTags.map((postTag) => {
-                tagData.map((tag) => {
-                   if (postTag.tag_id === tag.id) {
-                       tag.isChecked = true
-                   }
-                   else {
-                       tag.isChecked = false
-                   }
-               })
-           })
-
-           setTags(tagData)})
+                    getCategories().then(categoryData => setCategories(categoryData))
+                    setLoading(true)
+            
         }) 
             
         },
         [postId])
+
+        useEffect(
+            () => {
+                let newTagsArray = []
+                getTags().then((tagData) => {
+                    postTags.map((postTag) => {
+                        newTagsArray = tagData.map((tag) => {
+                            if (postTag.tag_id === tag.id) {
+                                tag.isChecked = true
+                                return tag
+                            }
+                            else {
+                                tag.isChecked = false
+                                return tag
+                            }
+                    })
+                })
+    
+               setTags(newTagsArray)})
+                
+            },
+            [doneLoading])
 
 
     const localUser = localStorage.getItem("auth_token")
@@ -116,8 +129,23 @@ export const EditPost = () => {
         )
     }
 
-    
+    const changeChecked = (e) => {
+        const copy = structuredClone(tags)
+        let tag = tags.find(t => t.id === parseInt(e.target.value))
+        if(e.target.checked){
+            tag.isChecked = true
+        }else{
+            tag.isChecked = false
+        }
+        for (const t of copy) {
+            if(t.id === tag.id){
+                t.isChecked = tag.isChecked
+            }
+        }
+        setTags(copy)
+    }
 
+    if(doneLoading){
     return <>
     <form className="newPostForm">
         <h2 className="title">Edit Post</h2>
@@ -207,22 +235,16 @@ export const EditPost = () => {
         <fieldset>
             {
                 tags.map(tag => <>
-                <input type="checkbox" id="tag" name="tag" 
+                <input type="checkbox" id={"tag-"+tag.id} name={tag.id}
                 value={tag.id} checked={tag.isChecked? "checked": ""}
                 onChange = {
-                    () => {
-                        const copy = structuredClone(tags)
-                        {
-                            tag.isChecked
-                            ? tag.isChecked = false
-                            : tag.isChecked = true
-                        }
-                        setTags(copy)
+                    (e) => {
+                        changeChecked(e)
                     }
                 }
                     
                 />
-                <label htmlFor="tag" value={tag.id}>{tag.label}</label>
+                <label for={"tag-"+tag.id} value={tag.id}>{tag.label}</label>
                 </>
                 )
             }
@@ -235,6 +257,9 @@ export const EditPost = () => {
         }>Update Post</button>
     </form>
     </>
+    } else {
+        return <>Loading</>
+    }
 }
 
 

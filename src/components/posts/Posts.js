@@ -75,7 +75,11 @@ export const Posts = () => {
         setSelectedCategory(parseInt(e.target.value))
     }        
 
-
+    const titleSearch = (e) => {
+        if (e.key === 'Enter'){
+            console.log('enter key')
+        }
+    }
 //separate module for dropdown function
 //export const Categories
 //let html = <select id="category">
@@ -89,7 +93,8 @@ export const Posts = () => {
             {/* Displaying the value of fruit */}
             
             <br />
-
+            <label for="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
+            <input id="titleSearch"></input><br />
             <select onChange={handleCategoryChange}> 
                 <option value={0}>Search by Category</option>
                         {/* Mapping through each fruit object in our fruits array
