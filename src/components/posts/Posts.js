@@ -23,6 +23,7 @@ export const Posts = () => {
         getPosts()
         .then((allPostsArray) => {
             setAllPosts(allPostsArray)
+            setSelectedPosts(allPostsArray)
         })
         getUsers()
                 .then((allUsersArray) => {
@@ -31,9 +32,9 @@ export const Posts = () => {
     }, [])
     
         
-   
-
-    
+//pulls in posts, users, categories, and holds them in state
+//if user is selected from dropdown, filter posts based on user id
+//if category is selected from dropdown, filter posts based on category id    
     //state to hold all posts
     //state to hold filtered posts
     
@@ -41,7 +42,7 @@ export const Posts = () => {
         () => {
             let selectedPostsArray = []
             if (selectedCategory !== 0) {
-                setSelectedUser(0)
+                
                 allPosts.map(
                     (post) => {
                         if (selectedCategory === post.category_id) {
@@ -49,17 +50,22 @@ export const Posts = () => {
                         }
                     }
                     )
+                    
                     setSelectedPosts(selectedPostsArray)
-            } else {
+            } else if (selectedUser === 0){
+                
                 setSelectedPosts(allPosts)
-            }},
+            }
+            setSelectedUser(0)
+        },
         [selectedCategory])
 
     useEffect(
         () => {
+            
             let selectedPostsArray = []
             if (selectedUser !== 0) {
-                setSelectedCategory(0)
+                
                 allPosts.map(
                     (post) => {
                         if (selectedUser === post.user_id) {
@@ -67,45 +73,48 @@ export const Posts = () => {
                         }
                     }
                     )
+                    
                     setSelectedPosts(selectedPostsArray)
-            } else {
+            } else if (selectedCategory === 0){
                 setSelectedPosts(allPosts)
-            }},
+            }
+            setSelectedCategory(0)
+        },
         [selectedUser])
 
-    useEffect(
-        () => {
-            let selectedPostsArray = []
-            if (selectedCategory !== 0) {
-                allPosts.map(
-                    (post) => {
-                        if (selectedCategory === post.category_id) {
-                            selectedPostsArray.push(post)
-                        }
-                    }
-                    )
-                    setSelectedPosts(selectedPostsArray)
-            } else if (selectedUser !== 0) {
-                allPosts.map(
-                    (post) => {
-                        if (selectedUser === post.user_id) {
-                            selectedPostsArray.push(post)
-                        }
-                    }
-                    )
-                    setSelectedPosts(selectedPostsArray)
-            } else {
-                    setSelectedPosts(allPosts)
+    // useEffect(
+    //     () => {
+    //         let selectedPostsArray = []
+    //         if (selectedCategory !== 0) {
+    //             allPosts.map(
+    //                 (post) => {
+    //                     if (selectedCategory === post.category_id) {
+    //                         selectedPostsArray.push(post)
+    //                     }
+    //                 }
+    //                 )
+    //                 setSelectedPosts(selectedPostsArray)
+    //         } else if (selectedUser !== 0) {
+    //             allPosts.map(
+    //                 (post) => {
+    //                     if (selectedUser === post.user_id) {
+    //                         selectedPostsArray.push(post)
+    //                     }
+    //                 }
+    //                 )
+    //                 setSelectedPosts(selectedPostsArray)
+    //         } else {
+    //                 setSelectedPosts(allPosts)
                     
-            }},
-        [allPosts])
+    //         }},
+    //     [allPosts])
             
     
     let handleCategoryChange = (e) => {
         setSelectedCategory(parseInt(e.target.value))
     }        
-    let handleAuthorChange = (e) => {
-        setSelectedUser(e.target.value)
+    let handleAuthorChange = (a) => {
+        setSelectedUser(parseInt(a.target.value))
     }
 
 
@@ -123,7 +132,7 @@ export const Posts = () => {
             
             <br />
 
-            <select onChange={handleCategoryChange}> 
+            <select value ={selectedCategory} onChange={handleCategoryChange}> 
                 <option value={0}>Search by Category</option>
                         {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -136,7 +145,7 @@ export const Posts = () => {
             
             <br />
 
-            <select onChange={handleAuthorChange}> 
+            <select value={selectedUser} onChange={handleAuthorChange}> 
                 <option value={0}>Search by Author</option>
                         {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
