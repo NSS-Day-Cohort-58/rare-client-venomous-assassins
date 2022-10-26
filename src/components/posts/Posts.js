@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { getPosts } from "../../managers/PostManager"
+import { getPosts, getPostsByCategory, getPostsByUser } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
+import { getUsers } from "../../managers/UserManager"
 
 
 
@@ -10,70 +11,40 @@ import { getCategories } from "../../managers/CategoryManager"
 export const Posts = () => {
 
     const [allPosts, setAllPosts] = useState([])
+    const [allTags, setAllTags] = useState([])
     const [allCategories, setCategories] = useState([])
     const [selectedPosts, setSelectedPosts] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState()
+    const [allUsers, setAllUsers] = useState([])
+    
+    
     
 
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
-    }, [])
-    
-    useEffect(
-        () => {
-            getPosts()
-                .then((allPostsArray) => {
-                    setAllPosts(allPostsArray)
+        getPosts()
+        .then((allPostsArray) => {
+            setAllPosts(allPostsArray)
+            setSelectedPosts(allPostsArray)
+        })
+        getUsers()
+                .then((allUsersArray) => {
+                    setAllUsers(allUsersArray)
                 })
-        },
-        [])
-        
-    useEffect(() => {
-        setSelectedCategory(0)
     }, [])
-
+   
     
-    //state to hold all posts
-    //state to hold filtered posts
-    
-    useEffect(
-        () => {
-            let selectedPostsArray = []
-            if (selectedCategory !== 0) {
-                allPosts.map(
-                    (post) => {
-                        if (selectedCategory === post.category_id) {
-                            selectedPostsArray.push(post)
-                        }
-                    }
-                    )
-                    setSelectedPosts(selectedPostsArray)
-            } else {
-                setSelectedPosts(allPosts)
-            }},
-        [selectedCategory])
-
-    useEffect(
-        () => {
-            let selectedPostsArray = []
-            if (selectedCategory !== 0) {
-                allPosts.map(
-                    (post) => {
-                        if (selectedCategory === post.category_id) {
-                            selectedPostsArray.push(post)
-                        }
-                    }
-                    )
-                    setSelectedPosts(selectedPostsArray)
-            } else {
-                setSelectedPosts(allPosts)
-            }},
-        [allPosts])
-            
-    
-    let handleCategoryChange = (e) => {
-        setSelectedCategory(parseInt(e.target.value))
+    let handleCategoryChange = (event) => {
+        getPostsByCategory(event.target.value)
+            .then(postsByCategoryArray => {
+                setSelectedPosts(postsByCategoryArray)
+            })
     }        
+    let handleAuthorChange = (a) => {
+        getPostsByUser(a.target.value)
+            .then(postsByUserArray => {
+                setSelectedPosts(postsByUserArray)
+            })
+    }
 
     const titleSearch = (e) => {
         if (e.key === 'Enter'){
@@ -97,10 +68,13 @@ export const Posts = () => {
             <input id="titleSearch"></input><br />
             <select onChange={handleCategoryChange}> 
                 <option value={0}>Search by Category</option>
-                        {/* Mapping through each fruit object in our fruits array
-                    and returning an option element with the appropriate attributes / values.
-                    */}
                 {allCategories.map((category) => <option value={category.id}>{category.label}</option>)}
+            </select>
+        </div>
+        <div className="author">
+            <select onChange={handleAuthorChange}> 
+                <option value={0}>Search by Author</option>
+                {allUsers.map((user) => <option value={user.id}>{user.username}</option>)}
             </select>
         </div>
         <div className="postsSection">
