@@ -46,9 +46,26 @@ export const Posts = () => {
             })
     }
 
+    const titleSearch = (e) => {
+        if (e.key === 'Enter'){
+            console.log('enter key')
+        }
+    }
+//separate module for dropdown function
+//export const Categories
+//let html = <select id="category">
+//html += <option value ="0">Search by Category</option>
+//map through categories
+//<option selected value="${category.id}">${category.name}</option>
+
     return <section>
         <h2>All Posts</h2>
         <div className="category">
+            {/* Displaying the value of fruit */}
+            
+            <br />
+            <label for="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
+            <input id="titleSearch"></input><br />
             <select onChange={handleCategoryChange}> 
                 <option value={0}>Search by Category</option>
                 {allCategories.map((category) => <option value={category.id}>{category.label}</option>)}

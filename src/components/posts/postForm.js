@@ -58,7 +58,7 @@ export const PostForm = () => {
             title: post.title,
             publication_date: post.publication_date,
             image_url: post.image_url,
-            content: post.content,
+            content: post.content
 
         }
 
