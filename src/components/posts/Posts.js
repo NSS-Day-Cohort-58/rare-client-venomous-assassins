@@ -1,10 +1,9 @@
 import React, { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { getPosts, getPostsByCategory, getPostsByTag, getPostsByUser } from "../../managers/PostManager"
+import { getPosts, getPostsByCategory, getPostsByUser } from "../../managers/PostManager"
 import { getCategories } from "../../managers/CategoryManager"
 import { getUsers } from "../../managers/UserManager"
-import { getTags } from "../../managers/Tags"
 
 
 
@@ -22,7 +21,6 @@ export const Posts = () => {
 
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
-        getTags().then(tagData => setAllTags(tagData))
         getPosts()
         .then((allPostsArray) => {
             setAllPosts(allPostsArray)
@@ -47,12 +45,6 @@ export const Posts = () => {
                 setSelectedPosts(postsByUserArray)
             })
     }
-    let handleTagChange = (a) => {
-        getPostsByTag(a.target.value)
-            .then(postsByTagArray => {
-                setSelectedPosts(postsByTagArray)
-            })
-    }
 
     return <section>
         <h2>All Posts</h2>
@@ -66,12 +58,6 @@ export const Posts = () => {
             <select onChange={handleAuthorChange}> 
                 <option value={0}>Search by Author</option>
                 {allUsers.map((user) => <option value={user.id}>{user.username}</option>)}
-            </select>
-        </div>
-        <div className="tag">
-            <select onChange={handleTagChange}> 
-                <option value={0}>Search by Tag</option>
-                {allTags.map((tag) => <option value={tag.id}>{tag.label}</option>)}
             </select>
         </div>
         <div className="postsSection">
