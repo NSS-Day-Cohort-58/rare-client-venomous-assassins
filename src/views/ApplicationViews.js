@@ -7,7 +7,7 @@ import { Posts } from "../components/posts/Posts"
 import { CategoryList } from "../components/categories/CategoryList"
 import { TagList } from "../components/tags/TagList"
 import { MyPosts } from "../components/posts/MyPosts"
-import { TagManager } from "../tags/TagManager"
+
 import { HomePosts } from "../components/posts/HomePosts"
 import { EditPost } from "../components/posts/EditPost"
 import { PostForm } from "../components/posts/postForm"
@@ -16,6 +16,9 @@ import { UserDetail } from "../components/users/UserDetail"
 import { Comments } from "../components/posts/postComments"
 import { AddComment } from "../components/posts/postAddComment"
 import { TagForm } from "../components/tags/TagForm"
+
+
+
 export const ApplicationViews = ({ token, setToken }) => {
   return <>
     <Routes>

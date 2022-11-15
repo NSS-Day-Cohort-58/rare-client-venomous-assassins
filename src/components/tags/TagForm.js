@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { addTag } from "../../managers/Tags"
+import { addTag } from "../../managers/TagManager"
+
 
 
 export const TagForm = () => {
