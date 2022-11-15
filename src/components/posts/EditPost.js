@@ -19,53 +19,13 @@ export const EditPost = () => {
 
     const [checkedTags, setCheckedTags] = useState([])
     
-    /*useEffect(
-        () => {
-            postTags.map((postTag) => {
-                 tags.map((tag) => {
-                    if (postTag.tag_id === tag.id) {
-                        tag.isChecked = true
-                    }
-                    else {
-                        tag.isChecked = false
-                    }
-                })
-            })
-            setTags(tags)
-        },
-        [categories]
-    )*/
-        
-
-
-
-    /*const matchingId = (id) => {
-
-        let idArray = []
-
-        postTags.map((postTag) => {
-            if (postTag.tag_id === id) {
-                idArray.push(postTag.tag_id)
-            }
-        }
-        )
-
-        if (idArray.length > 0) {
-            return true‰
-        }
-
-        else {
-            return false
-        }
-        
-    }*/
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/posts/${postId}`)
+            fetch(`http://localhost:8000/posts/${postId}`)
                 .then(response => response.json())
                 .then(post => setPost(post))
-            .then(() => fetch(`http://localhost:8088/post_tags?post_id=${postId}`))
+            .then(() => fetch(`http://localhost:8000/post_tags?post_id=${postId}`))
                 .then(response =>response.json())
                 .then(thisPostsTags => {
                     setPostTags(thisPostsTags)
@@ -137,7 +97,7 @@ export const EditPost = () => {
                         post_id: postId,
                         tag_id: tag.id
                     }
-                    fetch("http://localhost:8088/post_tags", { 
+                    fetch("http://localhost:8000/post_tags", { 
                         method: "POST", 
                         headers: {
                             "Content-Type": "application/json"
@@ -146,14 +106,14 @@ export const EditPost = () => {
                     })    
                     .then(response => response.json())
                 } else if (tag.isChecked === false && foundPostTag){
-                    fetch(`http://localhost:8088/post_tags/${tag.postTagId}`, {
+                    fetch(`http://localhost:8000/post_tags/${tag.postTagId}`, {
                         method: "DELETE"
                     })
                 }
             }
         }
 
-        return fetch(`http://localhost:8088/posts/${postId}`, {
+        return fetch(`http://localhost:8000/posts/${postId}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json"
