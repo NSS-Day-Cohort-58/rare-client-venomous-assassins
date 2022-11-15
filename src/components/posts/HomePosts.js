@@ -17,11 +17,11 @@ export const HomePosts = () => {
             getPosts()
                 .then((allPostsArray) => {
                     setPosts(allPostsArray)
-                    getSubscriptions()
-                        .then((subscriptionsArray) => {
-                            setSubscriptions(subscriptionsArray)
+                    //getSubscriptions()
+                        //.then((subscriptionsArray) => {
+                            //setSubscriptions(subscriptionsArray)
                             setLoading(true)
-                        })
+                       // })
                 })
         },
         [])
