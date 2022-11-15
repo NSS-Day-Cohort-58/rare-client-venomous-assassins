@@ -17,7 +17,7 @@ export const AddComment = () => {
     })
 
     const createComment = (commentObject) => {
-        return fetch(`http://localhost:8088/comments/${postId}`, {
+        return fetch(`http://localhost:8000/comments/${postId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

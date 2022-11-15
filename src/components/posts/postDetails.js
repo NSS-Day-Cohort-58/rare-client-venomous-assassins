@@ -15,13 +15,13 @@ export const PostDetails = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/posts/${postId}`)
+            fetch(`http://localhost:8000/posts/${postId}`)
                 .then(response => response.json())
                 .then((postObject) => {
                     setPost(postObject)
                 })
             .then(() => 
-            fetch(`http://localhost:8088/post_tags?post_id=${postId}`)
+            fetch(`http://localhost:8000/post_tags?post_id=${postId}`)
                 .then(response => response.json())
             )
             .then(postTagsArray => {

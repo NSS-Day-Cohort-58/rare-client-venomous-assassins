@@ -13,7 +13,7 @@ export const Comments = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/comments/${postId}`)
+            fetch(`http://localhost:8000/comments/${postId}`)
                 .then(response => response.json())
                 .then((commentsArray) => {
                     setComments(commentsArray)
@@ -22,7 +22,7 @@ export const Comments = () => {
         [postId])
 
     const removeComment = (id) => {
-        return fetch(`http://localhost:8088/comments/${id}`, {
+        return fetch(`http://localhost:8000/comments/${id}`, {
             method: "DELETE"
         })
         .then(()=>{
