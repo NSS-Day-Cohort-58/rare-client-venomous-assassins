@@ -8,8 +8,7 @@ export const HomePosts = () => {
     const [filteredPosts,setFilteredPosts] = useState([])
     const [subscriptions, setSubscriptions] = useState([])
     const [doneLoading, setLoading] = useState(false)
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    const auth_token = localStorage.getItem("auth_token")
 
 
     useEffect(
