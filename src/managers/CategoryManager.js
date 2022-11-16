@@ -1,5 +1,9 @@
 export const getCategories = () => {
-    return fetch(`http://localhost:8000/categories?_sortBy=label`)
+    return fetch(`http://localhost:8000/categories?_sortBy=label`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
+    })
         .then(res => res.json())
 }
 
