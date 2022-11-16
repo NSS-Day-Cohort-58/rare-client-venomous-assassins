@@ -5,9 +5,8 @@ import { UserList } from "../components/users/UserList"
 import { Authorized } from "./Authorized"
 import { Posts } from "../components/posts/Posts"
 import { CategoryList } from "../components/categories/CategoryList"
-import { TagList } from "../tags/TagList"
+import { TagList } from "../components/tags/TagList"
 import { MyPosts } from "../components/posts/MyPosts"
-import { TagManager } from "../tags/TagManager"
 import { HomePosts } from "../components/posts/HomePosts"
 import { EditPost } from "../components/posts/EditPost"
 import { PostForm } from "../components/posts/postForm"
@@ -15,12 +14,13 @@ import { PostDetails } from "../components/posts/postDetails"
 import { UserDetail } from "../components/users/UserDetail"
 import { Comments } from "../components/posts/postComments"
 import { AddComment } from "../components/posts/postAddComment"
+import { TagForm } from "../components/tags/TagForm"
 
 export const ApplicationViews = ({ token, setToken }) => {
   return <>
     <Routes>
       <Route path="/" element={<HomePosts />} />
-      <Route path="/tags" element={<TagManager />} />
+      <Route path="/tagForm" element={<TagForm />} />
       <Route path="/tags" element={<TagList />} />
       <Route path="/login" element={<Login setToken={setToken} />} />
       <Route path="/register" element={<Register setToken={setToken} />} />
