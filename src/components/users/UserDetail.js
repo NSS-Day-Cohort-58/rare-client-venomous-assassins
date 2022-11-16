@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { createSubscription, deleteSubscription, getSubscriptions } from "../../managers/SubscriptionManager"
+import { createSubscription, deleteSubscripton, getSubscriptions } from "../../managers/SubscriptionManager"
 import { getUser } from "../../managers/UserManager"
 
 export const UserDetail = () => {
@@ -57,7 +57,7 @@ export const UserDetail = () => {
         {
             notSelf
             ? <> {foundSubscription 
-                ? <button id={foundSubscription.id} onClick={clickEvent => deleteSubscription(clickEvent).then(window.location.reload())}>Unsubscribe</button>
+                ? <button id={foundSubscription.id} onClick={clickEvent => deleteSubscripton(clickEvent).then(window.location.reload())}>Unsubscribe</button>
                 : <button onClick={()=>makeSubscription()}>Subscribe</button>
                 } </> 
             : null

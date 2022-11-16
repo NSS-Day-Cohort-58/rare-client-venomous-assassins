@@ -3,3 +3,15 @@ export const deleteComment = (commentId) => {
         method: "DELETE"
     })
 }
+
+export const createComment = (commentObject) => {
+    return fetch(`http://localhost:8000/comments`, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        },
+        body: JSON.stringify(commentObject)
+    })
+}
