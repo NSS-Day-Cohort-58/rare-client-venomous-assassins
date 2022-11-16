@@ -1,5 +1,8 @@
 export const deleteComment = (commentId) => {
-    return fetch(`http://localhost:8088/comments/${commentId}`, {
-        method: "DELETE"
+    return fetch(`http://localhost:8000/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
     })
 }

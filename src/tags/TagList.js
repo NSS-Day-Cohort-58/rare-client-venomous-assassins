@@ -56,7 +56,7 @@ export const TagList = () => {
                     </button>
                     <button onClick={() => deleteTag(tag).then(() => window.location.reload())}>Delete</button>
                     {
-                        !userWantsToEditTag && selectedTag.id == tag.id
+                        !userWantsToEditTag && selectedTag.id === tag.id
                             ? <>
                             <form className="tagForm">
                                 <h2 className="tagForm_label">{"Edit Tag"}</h2>
