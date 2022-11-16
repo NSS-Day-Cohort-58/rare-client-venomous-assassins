@@ -19,7 +19,7 @@ export const AddComment = () => {
 
         const commentToSendToAPI = {
             content: comment.content, 
-            post: postId
+            post: parseInt(postId)
         }
 
         createComment(commentToSendToAPI)
