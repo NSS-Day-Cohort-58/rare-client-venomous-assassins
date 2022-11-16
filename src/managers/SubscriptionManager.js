@@ -1,7 +1,11 @@
 export const getSubscriptions = () => {
-    return fetch("http://localhost:8000/subscriptions")
+    return fetch("http://localhost:8000/subscriptions"), {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
+    }
         .then(res => res.json())
-  }
+}
 
 export const createSubscription = (sub) => {
     return fetch("http://localhost:8000/subscriptions", {
