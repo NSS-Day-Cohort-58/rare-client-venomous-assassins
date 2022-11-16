@@ -13,7 +13,7 @@ export const Comments = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/comments/${postId}`)
+            fetch(`http://localhost:8000/comments/${postId}`)
                 .then(response => response.json())
                 .then((commentsArray) => {
                     setComments(commentsArray)
@@ -22,12 +22,12 @@ export const Comments = () => {
         [postId])
 
     const removeComment = (id) => {
-        return fetch(`http://localhost:8088/comments/${id}`, {
+        return fetch(`http://localhost:8000/comments/${id}`, {
             method: "DELETE"
         })
-        .then(()=>{
-            window.location.reload()
-        })
+            .then(() => {
+                window.location.reload()
+            })
     }
 
     return <section>
@@ -36,7 +36,7 @@ export const Comments = () => {
             {
                 comments.map((comment) => {
                     let author = false
-                    if(comment.author_id === userObject){
+                    if (comment.author_id === userObject) {
                         author = true
                     }
                     return <li className="commentBox">
@@ -44,8 +44,8 @@ export const Comments = () => {
                             <p>{comment?.content}</p>
                             {
                                 author
-                                ? <button onClick={()=> removeComment(comment.id)}>&#128465;</button>
-                                : ""
+                                    ? <button onClick={() => removeComment(comment.id)}>&#128465;</button>
+                                    : ""
                             }
                         </div>
                     </li>
