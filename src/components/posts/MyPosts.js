@@ -22,11 +22,11 @@ export const MyPosts = () => {
 
     const deletePost = (evt) => {
 
-        return fetch(`http://localhost:8088/posts/${evt.target.value}`, {
+        return fetch(`http://localhost:8000/posts/${evt.target.value}`, {
             method: "DELETE"
         })
             .then(() => {
-                fetch(`http://localhost:8088/posts`)
+                fetch(`http://localhost:8000/posts`)
                     .then(response => response.json())
                     .then((postArray) => {
                         setAllPosts(postArray)
