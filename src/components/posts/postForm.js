@@ -34,7 +34,7 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8088/categories?_sortBy=label')
+            fetch('http://localhost:8000 a/categories?_sortBy=label')
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -49,11 +49,7 @@ export const PostForm = () => {
     const saveButton = (event) => {
         event.preventDefault()
 
-        const localUser = localStorage.getItem("auth_token")
-        const userObject = JSON.parse(localUser)
-
         const postToSendToAPI = {
-            user_id: userObject,
             category_id: post.category_id,
             title: post.title,
             publication_date: post.publication_date,
