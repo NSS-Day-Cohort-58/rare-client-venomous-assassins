@@ -2,31 +2,29 @@ import { useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { getPost } from "../../managers/PostManager"
 
 
 export const PostDetails = () => {
     const { postId } = useParams()
     const navigate = useNavigate()
-
     const [post, setPost] = useState({})
-
     const [postTags, setPostTags] = useState([])
 
 
     useEffect(
         () => {
-            fetch(`http://localhost:8000/posts/${postId}`)
-                .then(response => response.json())
+            getPost(postId)
                 .then((postObject) => {
                     setPost(postObject)
                 })
-            .then(() => 
-            fetch(`http://localhost:8000/post_tags?post_id=${postId}`)
-                .then(response => response.json())
-            )
-            .then(postTagsArray => {
-                setPostTags(postTagsArray)
-            })
+            // .then(() => 
+            // fetch(`http://localhost:8000/post_tags?post_id=${postId}`)
+            //     .then(response => response.json())
+            // )
+            // .then(postTagsArray => {
+            //     setPostTags(postTagsArray)
+            // })
         },
         [postId])
 
@@ -39,7 +37,7 @@ export const PostDetails = () => {
         <div>Content: {post?.content} </div>
         <div>
             {
-                postTags.map(tag => <div className="tag">{tag.tag.label}</div>)
+                // postTags.map(tag => <div className="tag">{tag.tag.label}</div>)
             }
         </div>
         <button

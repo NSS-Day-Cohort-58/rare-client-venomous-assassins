@@ -10,3 +10,22 @@ export const getPosts = () => {
         .then(response => response.json())
 }
 
+export const getSubscribedPosts = () => { 
+    return fetch(`http://localhost:8000/posts?subscribed`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
+    })
+        .then(response => response.json())
+}
+
+export const getPost = (postId) => { 
+    return fetch(`http://localhost:8000/posts/${postId}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
+    })
+        .then(response => response.json())
+}
