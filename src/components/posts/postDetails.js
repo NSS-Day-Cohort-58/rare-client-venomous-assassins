@@ -44,12 +44,12 @@ export const PostDetails = () => {
         </div>
         <button
             value={post.id}
-            onClick={(clickEvent) => navigate(`/comments/${post.id}`)}
+            onClick={(clickEvent) => navigate(`/comments/${postId}`)}
             className="comments-button"
         >View All Comments</button>
         <button
             value={postId}
-            onClick={(clickEvent) => navigate(`/addComment/${post.id}`)}
+            onClick={(clickEvent) => navigate(`/addComment/${postId}`)}
             className="add-button"
         >Add Comment</button>
 

@@ -2,8 +2,9 @@ export const loginUser = (user) => {
   return fetch("http://localhost:8000/login", {
     method: "POST",
     headers: {
+      'Accept': 'application/json',
       "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Authorization": `Token ${localStorage.getItem("auth_token")}`
     },
     body: JSON.stringify({
       username: user.username,
@@ -16,8 +17,9 @@ export const registerUser = (newUser) => {
   return fetch("http://localhost:8000/register", {
     method: "POST",
     headers: {
+      'Accept': 'application/json',
       "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Authorization": `Token ${localStorage.getItem("auth_token")}`
     },
     body: JSON.stringify(newUser)
   }).then(res => res.json())

@@ -11,7 +11,9 @@ export const createSubscription = (sub) => {
     return fetch("http://localhost:8000/subscriptions", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
         },
         body: JSON.stringify(sub)
     })
@@ -19,6 +21,11 @@ export const createSubscription = (sub) => {
 
 export const deleteSubscripton = (event) => {
     return fetch(`http://localhost:8000/subscriptions/${parseInt(event.target.id)}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
     })
 }

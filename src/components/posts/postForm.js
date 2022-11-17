@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { getTags } from "../../managers/Tags"
+import { getTags } from "../../managers/TagManager"
 
 export const PostForm = () => {
 
