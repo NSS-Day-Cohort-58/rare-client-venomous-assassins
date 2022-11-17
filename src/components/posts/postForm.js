@@ -34,7 +34,12 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8000 a/categories?_sortBy=label')
+            fetch('http://localhost:8000/categories?_sortBy=label',
+                {
+                    headers: {
+                        "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                    }
+                })
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -58,10 +63,12 @@ export const PostForm = () => {
 
         }
 
-        return fetch("http://localhost:8088/posts", {
+        return fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
             },
             body: JSON.stringify(postToSendToAPI)
         })
@@ -75,10 +82,12 @@ export const PostForm = () => {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8088/post_tags", { 
+                    return fetch("http://localhost:8000/post_tags", { 
                         method: "POST", 
                         headers: {
-                            "Content-Type": "application/json"
+                            'Accept': 'application/json',
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
                         },
                         body: JSON.stringify(postTagsToSendToAPI)
                     })    

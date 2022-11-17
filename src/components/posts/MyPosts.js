@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { getPosts } from "../../managers/PostManager"
+import { getCreatedPosts, getPosts } from "../../managers/PostManager"
 
 
 
@@ -8,13 +8,14 @@ import { getPosts } from "../../managers/PostManager"
 
 export const MyPosts = () => {
     const [allPosts, setAllPosts] = useState([])
+    const [myPosts, setMyPosts] = useState([])
     const navigate = useNavigate()
 
     useEffect(
         () => {
-            getPosts()
-                .then((allPostsArray) => {
-                    setAllPosts(allPostsArray)
+            getCreatedPosts()
+                .then((posts) => {
+                    setMyPosts(posts)
                 })
         },
         [])
@@ -44,10 +45,10 @@ export const MyPosts = () => {
         }
     }
 
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    // const localUser = localStorage.getItem("auth_token")
+    // const userObject = JSON.parse(localUser)
 
-    const myPosts = allPosts.filter(post => userObject === post.user_id)
+    // const myPosts = allPosts.filter(post => userObject === post.user_id)
 
 
     if (myPosts.length === 0) {
