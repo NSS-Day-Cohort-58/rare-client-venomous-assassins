@@ -1,10 +1,14 @@
+
+
 export const loginUser = (user) => {
+  
+
   return fetch("http://localhost:8000/login", {
     method: "POST",
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json",
-      "Authorization": `Token ${localStorage.getItem("auth_token")}`
+      "Authorization": `Token ${JSON.parse(localStorage.getItem("auth_token"))["token"]}`
     },
     body: JSON.stringify({
       username: user.username,

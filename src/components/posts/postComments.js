@@ -8,12 +8,15 @@ export const Comments = () => {
     const { postId } = useParams()
     const [comments, setComments] = useState([])
     const navigate = useNavigate()
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+  
 
     useEffect(
         () => {
-            fetch(`http://localhost:8000/comments/${postId}`)
+            fetch(`http://localhost:8000/comments/${postId}`, {
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then((commentsArray) => {
                     setComments(commentsArray)
@@ -23,7 +26,12 @@ export const Comments = () => {
 
     const removeComment = (id) => {
         return fetch(`http://localhost:8000/comments/${id}`, {
-            method: "DELETE"
+            method: "DELETE", 
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
+            }
         })
             .then(() => {
                 window.location.reload()
