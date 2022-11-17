@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { getTags } from "../../managers/Tags"
+import { getTags } from "../../managers/TagManager"
 
 export const PostForm = () => {
 
@@ -34,7 +34,11 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8088/categories?_sortBy=label')
+            fetch('http://localhost:8000/categories?_sortBy=label', {
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)

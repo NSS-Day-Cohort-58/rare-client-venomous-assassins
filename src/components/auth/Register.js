@@ -1,9 +1,10 @@
+import { useState } from "react"
 import { useRef } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { registerUser } from "../../managers/AuthManager"
 
-export const Register = ({setToken}) => {
+export const Register = ({ setToken }) => {
   const firstName = useRef()
   const lastName = useRef()
   const email = useRef()
@@ -14,22 +15,33 @@ export const Register = ({setToken}) => {
   const passwordDialog = useRef()
   const navigate = useNavigate()
 
+  const [isStaff, setStaff] = useState(false)
+  const [profilePic, setPic] = useState("")
+
   const handleRegister = (e) => {
     e.preventDefault()
-    
+
     if (password.current.value === verifyPassword.current.value) {
+
       const newUser = {
         username: username.current.value,
         first_name: firstName.current.value,
         last_name: lastName.current.value,
         email: email.current.value,
         password: password.current.value,
-        bio: bio.current.value
+        bio: bio.current.value,
+        is_staff: isStaff,
+        profile_image_url: profilePic
       }
+
+      if (newUser.profile_image_url === "") {
+        newUser.profile_image_url = "https://res.cloudinary.com/dupram4w7/image/upload/v1663620931/Screen_Shot_2022-09-19_at_2_ey3w9e.png"
+      }
+
 
       registerUser(newUser)
         .then(res => {
-          if ("valid" in res && res.valid) {
+          if ("token" in res) {
             setToken(res.token)
             navigate("/")
           }
@@ -42,7 +54,7 @@ export const Register = ({setToken}) => {
   return (
     <section className="columns is-centered">
       <form className="column is-two-thirds" onSubmit={handleRegister}>
-      <h1 className="title">Rare Publishing</h1>
+        <h1 className="title">Rare Publishing</h1>
         <p className="subtitle">Create an account</p>
         <div className="field">
           <label className="label">First Name</label>
@@ -96,6 +108,27 @@ export const Register = ({setToken}) => {
           </div>
         </div>
 
+        <div className="field">
+          <label className="label">Profile Image URL</label>
+          <div className="control">
+            <input className="input" type="profile_image_url" value={profilePic}
+              onChange={(evt) => {
+                setPic(evt.target.value)
+              }} />
+          </div>
+        </div>
+        <div className="field">
+          <label className="label">Check if Staff
+            <input type="checkbox"
+              onClick={() => {
+                isStaff
+                  ? setStaff(false)
+                  : setStaff(true)
+              }}>
+            </input>
+          </label>
+        </div>
+
         <div className="field is-grouped">
           <div className="control">
             <button className="button is-link" type="submit">Submit</button>
@@ -106,6 +139,6 @@ export const Register = ({setToken}) => {
         </div>
 
       </form>
-    </section>
+    </section >
   )
 }
