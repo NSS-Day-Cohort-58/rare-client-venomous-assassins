@@ -10,7 +10,7 @@ export const PostForm = () => {
 
     const [categories, setCategories] = useState([])
     const [post, setNewPost] = useState({
-        user_id: "",
+        user_id: 0,
         category_id: "",
         title: "",
         publication_date: "",
@@ -34,11 +34,12 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8000/categories?_sortBy=label', {
-                headers: {
-                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
-                }
-            })
+            fetch('http://localhost:8000/categories?_sortBy=label',
+                {
+                    headers: {
+                        "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                    }
+                })
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -53,22 +54,19 @@ export const PostForm = () => {
     const saveButton = (event) => {
         event.preventDefault()
 
-        const localUser = localStorage.getItem("auth_token")
-        const userObject = JSON.parse(localUser)
-
         const postToSendToAPI = {
-            user_id: userObject,
-            category_id: post.category_id,
+            user_id: parseInt(post.user_id),
+            category_id: parseInt(post.category_id),
             title: post.title,
             publication_date: post.publication_date,
             image_url: post.image_url,
-            content: post.content
-
+            content: post.content,
         }
 
         return fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: {
+                'Accept': 'application/json',
                 "Content-Type": "application/json",
                 "Authorization": `Token ${localStorage.getItem("auth_token")}`
             },
@@ -84,9 +82,10 @@ export const PostForm = () => {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8000/post_tags", {
+                    return fetch(`http://localhost:8000/posts/${postId}/addTag`, {
                         method: "POST",
                         headers: {
+                            'Accept': 'application/json',
                             "Content-Type": "application/json",
                             "Authorization": `Token ${localStorage.getItem("auth_token")}`
                         },

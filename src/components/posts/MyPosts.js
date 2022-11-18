@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { getPosts } from "../../managers/PostManager"
+import { getCreatedPosts, getPosts } from "../../managers/PostManager"
 
 
 
@@ -8,13 +8,14 @@ import { getPosts } from "../../managers/PostManager"
 
 export const MyPosts = () => {
     const [allPosts, setAllPosts] = useState([])
+    const [myPosts, setMyPosts] = useState([])
     const navigate = useNavigate()
 
     useEffect(
         () => {
-            getPosts()
-                .then((allPostsArray) => {
-                    setAllPosts(allPostsArray)
+            getCreatedPosts()
+                .then((posts) => {
+                    setMyPosts(posts)
                 })
         },
         [])
@@ -44,11 +45,6 @@ export const MyPosts = () => {
         }
     }
 
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
-
-    const myPosts = allPosts.filter(post => userObject === post.user_id)
-
 
     if (myPosts.length === 0) {
         return <div>You have no posts created yet!</div>
@@ -60,7 +56,7 @@ export const MyPosts = () => {
                 {
                     myPosts.map(
                         (post) => {
-                            return <li className="postBox">
+                            return <li className="postBox" key={post.id}>
                                 <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                                 <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                                 <div className="postInfo">
