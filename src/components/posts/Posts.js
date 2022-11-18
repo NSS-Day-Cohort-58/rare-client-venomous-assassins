@@ -95,21 +95,21 @@ export const Posts = () => {
             {/* Displaying the value of fruit */}
 
             <br />
-            <label for="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
+            <label htmlFor="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
             <input id="titleSearch"></input><br />
             <select onChange={handleCategoryChange}>
                 <option value={0}>Search by Category</option>
                 {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
                     */}
-                {allCategories.map((category) => <option value={category.id}>{category.label}</option>)}
+                {allCategories.map((category) => <option value={category.id} key={category.id}>{category.label}</option>)}
             </select>
         </div>
         <div className="postsSection">
             <div>
                 {
                     selectedPosts.map((post) => {
-                        return <li className="postBox">
+                        return <li className="postBox" key={post.id}>
                             <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                             <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                             <div className="postInfo">

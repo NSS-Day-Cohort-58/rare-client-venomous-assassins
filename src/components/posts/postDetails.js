@@ -10,23 +10,17 @@ export const PostDetails = () => {
 
     const [post, setPost] = useState({})
 
-    const [postTags, setPostTags] = useState([])
-
-
     useEffect(
         () => {
-            fetch(`http://localhost:8088/posts/${postId}`)
+            fetch(`http://localhost:8000/posts/${postId}`, {
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then((postObject) => {
                     setPost(postObject)
                 })
-            .then(() => 
-            fetch(`http://localhost:8088/post_tags?post_id=${postId}`)
-                .then(response => response.json())
-            )
-            .then(postTagsArray => {
-                setPostTags(postTagsArray)
-            })
         },
         [postId])
 
@@ -39,7 +33,7 @@ export const PostDetails = () => {
         <div>Content: {post?.content} </div>
         <div>
             {
-                postTags.map(tag => <div className="tag">{tag.tag.label}</div>)
+                post?.tags?.map(tag => <div className="tag">{tag.label}</div>)
             }
         </div>
         <button
@@ -55,5 +49,3 @@ export const PostDetails = () => {
 
     </div>
 }
-
-//work on displaying tags selected
