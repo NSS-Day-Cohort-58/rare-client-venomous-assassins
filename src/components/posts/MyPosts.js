@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { getPosts } from "../../managers/PostManager"
+import { getMyPosts, getPosts } from "../../managers/PostManager"
 
 
 
 
 
 export const MyPosts = () => {
-    const [allPosts, setAllPosts] = useState([])
+    const [myPosts, setMyPosts] = useState([])
     const navigate = useNavigate()
 
     useEffect(
         () => {
-            getPosts()
+            getMyPosts()
                 .then((allPostsArray) => {
-                    setAllPosts(allPostsArray)
+                    setMyPosts(allPostsArray)
                 })
         },
         [])
@@ -22,14 +22,14 @@ export const MyPosts = () => {
 
     const deletePost = (evt) => {
 
-        return fetch(`http://localhost:8088/posts/${evt.target.value}`, {
+        return fetch(`http://localhost:8000/posts/${evt.target.value}`, {
             method: "DELETE"
         })
             .then(() => {
-                fetch(`http://localhost:8088/posts`)
+                fetch(`http://localhost:8000/posts`)
                     .then(response => response.json())
                     .then((postArray) => {
-                        setAllPosts(postArray)
+                        setMyPosts(postArray)
                     })
 
             })
@@ -45,9 +45,9 @@ export const MyPosts = () => {
     }
 
     const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    // const userObject = JSON.parse(localUser)
 
-    const myPosts = allPosts.filter(post => userObject === post.user_id)
+    // const myPosts = allPosts.filter(post => userObject === post.user_id)
 
 
     if (myPosts.length === 0) {
@@ -64,7 +64,7 @@ export const MyPosts = () => {
                         <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                         <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                         <div className="postInfo">
-                            <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                            <p>Author: {post.author.full_name}</p>
                             <p>Category: {post.category.label}</p>
                         </div>
                         <button id={post.id}

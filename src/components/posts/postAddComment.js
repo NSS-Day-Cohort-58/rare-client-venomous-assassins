@@ -8,19 +8,19 @@ export const AddComment = () => {
     const navigate = useNavigate()
 
     const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    // const userObject = JSON.parse(localUser)
 
     const [comment, setComment] = useState({
         post_id: parseInt(postId),
-        author_id: userObject,
         content: ""
     })
 
     const createComment = (commentObject) => {
-        return fetch(`http://localhost:8088/comments/${postId}`, {
+        return fetch(`http://localhost:8000/comments`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
             },
             body: JSON.stringify(commentObject)
         })
@@ -32,8 +32,8 @@ export const AddComment = () => {
 
         const commentToSendToAPI = {
             post_id: postId,
-            author_id: userObject,
-            content: comment.content
+            content: comment.content,
+            subject: "test"
 
         }
 
