@@ -4,7 +4,6 @@ export const loginUser = (user) => {
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json",
-      "Authorization": `Token ${localStorage.getItem("auth_token")}`
     },
     body: JSON.stringify({
       username: user.username,
@@ -19,7 +18,6 @@ export const registerUser = (newUser) => {
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json",
-      "Authorization": `Token ${localStorage.getItem("auth_token")}`
     },
     body: JSON.stringify(newUser)
   }).then(res => res.json())
