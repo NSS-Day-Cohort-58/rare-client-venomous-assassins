@@ -18,13 +18,6 @@ export const PostDetails = () => {
                 .then((postObject) => {
                     setPost(postObject)
                 })
-            // .then(() => 
-            // fetch(`http://localhost:8000/post_tags?post_id=${postId}`)
-            //     .then(response => response.json())
-            // )
-            // .then(postTagsArray => {
-            //     setPostTags(postTagsArray)
-            // })
         },
         [postId])
 
@@ -37,7 +30,7 @@ export const PostDetails = () => {
         <div>Content: {post?.content} </div>
         <div>
             {
-                // postTags.map(tag => <div className="tag">{tag.tag.label}</div>)
+                post?.tags?.map(tag => <div className="tag">{tag.label}</div>)
             }
         </div>
         <button

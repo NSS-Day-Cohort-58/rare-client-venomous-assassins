@@ -65,6 +65,8 @@ export const PostForm = () => {
 
         }
 
+        let postId = 0
+
         return fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: {
@@ -75,27 +77,27 @@ export const PostForm = () => {
             body: JSON.stringify(postToSendToAPI)
         })
             .then(response => response.json())
-            // .then(updatedPost =>{
+            .then(updatedPost =>{
 
-            //     postId = updatedPost.id
+                postId = updatedPost.id
                 
-            //     checked.map(check => {
-            //         const postTagsToSendToAPI = {
-            //             post_id: updatedPost.id,
-            //             tag_id: parseInt(check)
-            //         }
-            //         return fetch("http://localhost:8000/post_tags", { 
-            //             method: "POST", 
-            //             headers: {
-            //                 "Content-Type": "application/json",
-            //                 "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                checked.map(check => {
+                    const postTagsToSendToAPI = {
+                        post_id: updatedPost.id,
+                        tag_id: parseInt(check)
+                    }
+                    return fetch(`http://localhost:8000/posts/${updatedPost.id}/addTag`, { 
+                        method: "POST", 
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
 
-            //             },
-            //             body: JSON.stringify(postTagsToSendToAPI)
-            //         })    
-            //         .then(response => response.json())
-            //     })
-            // })
+                        },
+                        body: JSON.stringify(postTagsToSendToAPI)
+                    })    
+                    .then(response => response.json())
+                })
+            })
             .then(() => {
                 navigate(`/posts/${postId}`)
             })
