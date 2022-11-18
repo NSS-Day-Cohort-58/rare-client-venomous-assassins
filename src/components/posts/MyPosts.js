@@ -45,11 +45,6 @@ export const MyPosts = () => {
         }
     }
 
-    // const localUser = localStorage.getItem("auth_token")
-    // const userObject = JSON.parse(localUser)
-
-    // const myPosts = allPosts.filter(post => userObject === post.user_id)
-
 
     if (myPosts.length === 0) {
         return <div>You have no posts created yet!</div>
