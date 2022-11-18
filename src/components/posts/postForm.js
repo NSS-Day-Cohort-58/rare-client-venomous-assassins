@@ -10,7 +10,7 @@ export const PostForm = () => {
 
     const [categories, setCategories] = useState([])
     const [post, setNewPost] = useState({
-        user_id: "",
+        user_id: 0,
         category_id: "",
         title: "",
         publication_date: "",
@@ -55,12 +55,12 @@ export const PostForm = () => {
         event.preventDefault()
 
         const postToSendToAPI = {
-            category_id: post.category_id,
+            user_id: parseInt(post.user_id),
+            category_id: parseInt(post.category_id),
             title: post.title,
             publication_date: post.publication_date,
             image_url: post.image_url,
-            content: post.content
-
+            content: post.content,
         }
 
         return fetch("http://localhost:8000/posts", {
@@ -82,7 +82,7 @@ export const PostForm = () => {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8000/post_tags", { 
+                    return fetch(`http://localhost:8000/posts/${postId}/addTag`, { 
                         method: "POST", 
                         headers: {
                             'Accept': 'application/json',
