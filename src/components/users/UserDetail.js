@@ -23,11 +23,10 @@ export const UserDetail = () => {
         [])
 
 
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    let userObject = ""
 
     const foundSubscription = subscriptions.find(sub => {
-        return sub.follower_id === userObject && sub.author_id === user.id
+        return sub.follower_id === userId && sub.author_id === user.id
     })
 
     const makeSubscription = () => {
@@ -35,7 +34,6 @@ export const UserDetail = () => {
 
         let newSub = {
             author_id: user.id,
-            follower_id: userObject,
             created_on: timestamp
         }
 
@@ -50,9 +48,8 @@ export const UserDetail = () => {
 
     return <div className="userDiv">
         <div className="user-photo"><img src={user?.profile_image_url} alt="image"></img></div>
-        <div className="user-name">Name: {user?.first_name} {user?.last_name}</div>
-        <div className="user-username">Username: {user?.username} </div>
-        <div className="user-date">Creation Date: {user?.created_on} </div>
+        <div className="user-name">Name: {user?.full_name}</div>
+        <div className="user-username">Username: {user?.user?.username} </div>
         <div className="user-bio">Bio: {user?.bio}</div>
         {
             notSelf
