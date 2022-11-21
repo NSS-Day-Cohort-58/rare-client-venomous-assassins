@@ -12,6 +12,7 @@ export const Register = ({setToken}) => {
   const password = useRef()
   const verifyPassword = useRef()
   const passwordDialog = useRef()
+  const profile_img_url = useRef()
   const navigate = useNavigate()
 
   const handleRegister = (e) => {
@@ -24,7 +25,8 @@ export const Register = ({setToken}) => {
         last_name: lastName.current.value,
         email: email.current.value,
         password: password.current.value,
-        bio: bio.current.value
+        bio: bio.current.value,
+        profile_img_url: profile_img_url.current.value
       }
 
       registerUser(newUser)
@@ -44,6 +46,14 @@ export const Register = ({setToken}) => {
       <form className="column is-two-thirds" onSubmit={handleRegister}>
       <h1 className="title">Rare Publishing</h1>
         <p className="subtitle">Create an account</p>
+
+        <div className="field">
+          <label htmlFor="image">Profile Image</label>
+          <div className="control">
+            <input className="input" type="text" ref={profile_img_url} />
+          </div>
+        </div>
+
         <div className="field">
           <label className="label">First Name</label>
           <div className="control">
