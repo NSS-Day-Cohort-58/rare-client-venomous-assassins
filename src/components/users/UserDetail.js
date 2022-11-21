@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { createSubscription, deleteSubscripton, getSubscriptions } from "../../managers/SubscriptionManager"
+import { createSubscription, updateSubscription, getActiveSubscription } from "../../managers/SubscriptionManager"
 import { getUser } from "../../managers/UserManager"
 
 export const UserDetail = () => {
     const { userId } = useParams()
 
     const [user, setUser] = useState({})
-    const [subscriptions, setSubscriptions] = useState([])
 
 
     useEffect(
@@ -16,37 +15,26 @@ export const UserDetail = () => {
         },
         [userId])
 
-    useEffect(
-        () => {
-            getSubscriptions().then(subData => setSubscriptions(subData))
-        },
-        [])
+    const update = () => {
+
+        let updatedSub = {
+            author: user.id
+        }
+
+        updateSubscription(user.sub_info.subscription).then(() => window.location.reload(false))
+    }
 
 
-    // const localUser = localStorage.getItem("auth_token")
-    // const userObject = JSON.parse(localUser)
+    const makeSubscription = () => {
 
-    // const foundSubscription = subscriptions.find(sub => {
-    //     return sub.follower_id === userObject && sub.author_id === user.id
-    // })
+        let newSub = {
+            author: user.id
+        }
 
-    // const makeSubscription = () => {
-    //     let timestamp = Date.now()
+        createSubscription(newSub).then(() => window.location.reload(false))
+    }
 
-    //     let newSub = {
-    //         author_id: user.id,
-    //         follower_id: userObject,
-    //         created_on: timestamp
-    //     }
 
-    //     createSubscription(newSub).then(window.location.reload())
-    // }
-
-    // let notSelf = true
-
-    // if (user.id === userObject) {
-    //     notSelf = false
-    // }
     let staffType = null
     if (user.is_staff === "True") {
         staffType = "Admin"
@@ -62,14 +50,10 @@ export const UserDetail = () => {
         <div className="user-username">User Type: {staffType} </div>
         <div className="user-date">Creation Date: {user?.created_on} </div>
         <div className="user-bio">Bio: {user?.bio}</div>
-        {/* {
-            notSelf
-                ? <> {foundSubscription
-                    ? <button id={foundSubscription.id} onClick={clickEvent => deleteSubscripton(clickEvent).then(window.location.reload())}>Unsubscribe</button>
-                    : <button onClick={() => makeSubscription()}>Subscribe</button>
-                } </>
-                : null
-
-        } */}
+        {
+            (user?.sub_info?.subscription === null)
+                ? <button onClick={() => makeSubscription()}>Subscribe</button>
+                : <button onClick={clickEvent => update()}>Unsubscribe</button>
+        }
     </div>
 }

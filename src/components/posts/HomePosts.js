@@ -18,26 +18,26 @@ export const HomePosts = () => {
                 })
         }, [])
 
-    if(doneLoading && subscribedPosts.length > 0){
+    if (doneLoading && subscribedPosts.length > 0) {
         return (
-            <> 
-            <h3>Posts from author subscriptions:</h3>                  
-            {   
-            subscribedPosts.map((post) => {
-                return <li className="postBox" key={post.id}>
-                    <img className="postPic" src={post.image_url} width="600px" alt=""></img>
-                    <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
-                    <div className="postInfo">
-                        <p>Author: {post.user.first_name} {post.user.last_name}</p>
-                        <p>Category: {post.category.label}</p>
-                    </div>
-                    </li>
+            <>
+                <h3>Posts from author subscriptions:</h3>
+                {
+                    subscribedPosts.map((post) => {
+                        return <li className="postBox" key={post.id}>
+                            <img className="postPic" src={post.image_url} width="600px" alt=""></img>
+                            <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
+                            <div className="postInfo">
+                                <p>Author: {post.user.full_name}</p>
+                                <p>Category: {post.category.label}</p>
+                            </div>
+                        </li>
+                    }
+                    )
                 }
-                )
-            }
             </>
         )
-    } else if(doneLoading && subscribedPosts.length === 0) {
+    } else if (doneLoading && subscribedPosts.length === 0) {
         return <div>You are not subscribed to any authors that have published articles!</div>
     } else {
         return <div>Loading!</div>

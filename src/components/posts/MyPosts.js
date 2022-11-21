@@ -60,7 +60,7 @@ export const MyPosts = () => {
                                 <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                                 <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                                 <div className="postInfo">
-                                    <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                                    <p>Author: {post.user.full_name}</p>
                                     <p>Category: {post.category.label}</p>
                                 </div>
                                 <button id={post.id}
