@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { deleteTag, getTags, updateTags } from "../managers/Tags";
+import { deleteTag, getTags, updateTags } from "../../managers/TagManager";
 
 
 export const TagList = () => {

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { getTags } from "../../managers/Tags"
+import { getTags } from "../../managers/TagManager"
 
 export const PostForm = () => {
 
@@ -10,7 +10,7 @@ export const PostForm = () => {
 
     const [categories, setCategories] = useState([])
     const [post, setNewPost] = useState({
-        user_id: "",
+        user_id: 0,
         category_id: "",
         title: "",
         publication_date: "",
@@ -20,8 +20,8 @@ export const PostForm = () => {
     const [tags, setTags] = useState([])
 
 
-   const [checked, setChecked] = useState([])
-   
+    const [checked, setChecked] = useState([])
+
     const handleCheck = (event) => {
         let updatedList = [...checked]
         if (event.target.checked) {
@@ -34,7 +34,12 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8088/categories?_sortBy=label')
+            fetch('http://localhost:8000/categories?_sortBy=label',
+                {
+                    headers: {
+                        "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                    }
+                })
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -43,57 +48,57 @@ export const PostForm = () => {
         },
         []
     )
-    
+
     let postId = null
 
     const saveButton = (event) => {
         event.preventDefault()
 
-        const localUser = localStorage.getItem("auth_token")
-        const userObject = JSON.parse(localUser)
-
         const postToSendToAPI = {
-            user_id: userObject,
-            category_id: post.category_id,
+            user_id: parseInt(post.user_id),
+            category_id: parseInt(post.category_id),
             title: post.title,
             publication_date: post.publication_date,
             image_url: post.image_url,
-            content: post.content
-
+            content: post.content,
         }
 
-        return fetch("http://localhost:8088/posts", {
+        return fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
             },
             body: JSON.stringify(postToSendToAPI)
         })
             .then(response => response.json())
-            .then(updatedPost =>{
+            .then(updatedPost => {
 
                 postId = updatedPost.id
-                
+
                 checked.map(check => {
                     const postTagsToSendToAPI = {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8088/post_tags", { 
-                        method: "POST", 
+                    return fetch(`http://localhost:8000/posts/${postId}/addTag`, {
+                        method: "POST",
                         headers: {
-                            "Content-Type": "application/json"
+                            'Accept': 'application/json',
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
                         },
                         body: JSON.stringify(postTagsToSendToAPI)
-                    })    
-                    .then(response => response.json())
+                    })
+                        .then(response => response.json())
                 })
             })
             .then(() => {
                 navigate(`/posts/${postId}`)
             })
 
-        
+
     }
 
 
@@ -188,13 +193,13 @@ export const PostForm = () => {
         <fieldset>
             {
                 tags.map(tag => <>
-                <input type="checkbox" id="tag" name="tag" value={tag.id}
-                onChange = {
-                    (evt) => {
-                        handleCheck(evt)
-                    }
-                }/>
-                <label htmlFor="tag" value={tag.id}>{tag.label}</label>
+                    <input type="checkbox" id="tag" name="tag" value={tag.id}
+                        onChange={
+                            (evt) => {
+                                handleCheck(evt)
+                            }
+                        } />
+                    <label htmlFor="tag" value={tag.id}>{tag.label}</label>
                 </>
                 )
             }

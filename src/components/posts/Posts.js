@@ -13,12 +13,12 @@ export const Posts = () => {
     const [allCategories, setCategories] = useState([])
     const [selectedPosts, setSelectedPosts] = useState([])
     const [selectedCategory, setSelectedCategory] = useState()
-    
+
 
     useEffect(() => {
         getCategories().then(categoryData => setCategories(categoryData))
     }, [])
-    
+
     useEffect(
         () => {
             getPosts()
@@ -27,15 +27,15 @@ export const Posts = () => {
                 })
         },
         [])
-        
+
     useEffect(() => {
         setSelectedCategory(0)
     }, [])
 
-    
+
     //state to hold all posts
     //state to hold filtered posts
-    
+
     useEffect(
         () => {
             let selectedPostsArray = []
@@ -46,11 +46,12 @@ export const Posts = () => {
                             selectedPostsArray.push(post)
                         }
                     }
-                    )
-                    setSelectedPosts(selectedPostsArray)
+                )
+                setSelectedPosts(selectedPostsArray)
             } else {
                 setSelectedPosts(allPosts)
-            }},
+            }
+        },
         [selectedCategory])
 
     useEffect(
@@ -63,55 +64,56 @@ export const Posts = () => {
                             selectedPostsArray.push(post)
                         }
                     }
-                    )
-                    setSelectedPosts(selectedPostsArray)
+                )
+                setSelectedPosts(selectedPostsArray)
             } else {
                 setSelectedPosts(allPosts)
-            }},
+            }
+        },
         [allPosts])
-            
-    
+
+
     let handleCategoryChange = (e) => {
         setSelectedCategory(parseInt(e.target.value))
-    }        
+    }
 
     const titleSearch = (e) => {
-        if (e.key === 'Enter'){
+        if (e.key === 'Enter') {
             console.log('enter key')
         }
     }
-//separate module for dropdown function
-//export const Categories
-//let html = <select id="category">
-//html += <option value ="0">Search by Category</option>
-//map through categories
-//<option selected value="${category.id}">${category.name}</option>
+    //separate module for dropdown function
+    //export const Categories
+    //let html = <select id="category">
+    //html += <option value ="0">Search by Category</option>
+    //map through categories
+    //<option selected value="${category.id}">${category.name}</option>
 
     return <section>
         <h2>All Posts</h2>
         <div className="category">
             {/* Displaying the value of fruit */}
-            
+
             <br />
-            <label for="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
+            <label htmlFor="titleSearch" onKeyDown={(e) => titleSearch(e)}>Search posts by title</label>
             <input id="titleSearch"></input><br />
-            <select onChange={handleCategoryChange}> 
+            <select onChange={handleCategoryChange}>
                 <option value={0}>Search by Category</option>
-                        {/* Mapping through each fruit object in our fruits array
+                {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
                     */}
-                {allCategories.map((category) => <option value={category.id}>{category.label}</option>)}
+                {allCategories.map((category) => <option value={category.id} key={category.id}>{category.label}</option>)}
             </select>
         </div>
         <div className="postsSection">
             <div>
-                {   
+                {
                     selectedPosts.map((post) => {
-                        return <li className="postBox">
+                        return <li className="postBox" key={post.id}>
                             <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                             <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                             <div className="postInfo">
-                                <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                                <p>Author: {post.user.full_name} </p>
                                 <p>Category: {post.category.label}</p>
                             </div>
                         </li>

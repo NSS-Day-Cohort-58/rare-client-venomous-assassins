@@ -1,44 +1,29 @@
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { createComment } from "../../managers/CommentManager"
 
 export const AddComment = () => {
 
     const { postId } = useParams()
     const navigate = useNavigate()
 
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
 
     const [comment, setComment] = useState({
-        post_id: parseInt(postId),
-        author_id: userObject,
         content: ""
     })
-
-    const createComment = (commentObject) => {
-        return fetch(`http://localhost:8088/comments/${postId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(commentObject)
-        })
-    }
 
 
     const saveButton = (event) => {
         event.preventDefault()
 
         const commentToSendToAPI = {
-            post_id: postId,
-            author_id: userObject,
-            content: comment.content
-
+            content: comment.content, 
+            post: parseInt(postId)
         }
 
         createComment(commentToSendToAPI)
-            .then(newComment => navigate(`/comments/${postId}`))
+            .then(() => navigate(`/comments/${postId}`))
     }
 
     return <form className="newPostForm">
