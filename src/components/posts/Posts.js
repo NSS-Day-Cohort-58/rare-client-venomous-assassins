@@ -42,7 +42,7 @@ export const Posts = () => {
             if (selectedCategory !== 0) {
                 allPosts.map(
                     (post) => {
-                        if (selectedCategory === post.category_id) {
+                        if (selectedCategory === post.category.id) {
                             selectedPostsArray.push(post)
                         }
                     }
@@ -59,7 +59,7 @@ export const Posts = () => {
             if (selectedCategory !== 0) {
                 allPosts.map(
                     (post) => {
-                        if (selectedCategory === post.category_id) {
+                        if (selectedCategory === post.category.id) {
                             selectedPostsArray.push(post)
                         }
                     }
@@ -111,7 +111,7 @@ export const Posts = () => {
                             <img className="postPic" src={post.image_url} width="600px" alt=""></img>
                             <Link className="postName" to={`/posts/${post.id}`}>{post?.title}</Link>
                             <div className="postInfo">
-                                <p>Author: {post.user.first_name} {post.user.last_name}</p>
+                                <p>Author: {post.author.full_name}</p>
                                 <p>Category: {post.category.label}</p>
                             </div>
                         </li>

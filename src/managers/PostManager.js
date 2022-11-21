@@ -29,3 +29,13 @@ export const getPost = (postId) => {
     })
         .then(response => response.json())
 }
+
+export const getMyPosts = () => { 
+    return fetch(`http://localhost:8000/posts?mine`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+        }
+    })
+        .then(response => response.json())
+}
