@@ -34,7 +34,11 @@ export const PostForm = () => {
 
     useEffect(
         () => {
-            fetch('http://localhost:8088/categories?_sortBy=label')
+            fetch('http://localhost:8000/categories',{
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then((categoryArray) => {
                     setCategories(categoryArray)
@@ -49,12 +53,11 @@ export const PostForm = () => {
     const saveButton = (event) => {
         event.preventDefault()
 
-        const localUser = localStorage.getItem("auth_token")
-        const userObject = JSON.parse(localUser)
+        // const localUser = localStorage.getItem("auth_token")
+        // const userObject = JSON.parse(localUser)
 
         const postToSendToAPI = {
-            user_id: userObject,
-            category_id: post.category_id,
+            category: post.category_id,
             title: post.title,
             publication_date: post.publication_date,
             image_url: post.image_url,
@@ -62,10 +65,14 @@ export const PostForm = () => {
 
         }
 
-        return fetch("http://localhost:8088/posts", {
+        let postId = 0
+
+        return fetch("http://localhost:8000/posts", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
+
             },
             body: JSON.stringify(postToSendToAPI)
         })
@@ -79,10 +86,12 @@ export const PostForm = () => {
                         post_id: updatedPost.id,
                         tag_id: parseInt(check)
                     }
-                    return fetch("http://localhost:8088/post_tags", { 
+                    return fetch(`http://localhost:8000/posts/${updatedPost.id}/addTag`, { 
                         method: "POST", 
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+
                         },
                         body: JSON.stringify(postTagsToSendToAPI)
                     })    

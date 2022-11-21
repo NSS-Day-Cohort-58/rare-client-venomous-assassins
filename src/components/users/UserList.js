@@ -13,11 +13,11 @@ export const UserList = () => {
       return (
         <>
         {
-            users.map(user => {
+            users?.map(user => {
                 return <section>
-                <Link to={`/users/${user?.id}`}>{user?.username}</Link>
-                <p>{user?.first_name} {user?.last_name}</p>
-                <p>{user?.email}</p>
+                <Link to={`/users/${user?.id}`}>{user?.user?.username}</Link>
+                <p>{user?.full_name}</p>
+                <p>{user?.user?.email}</p>
                 </section>
             })
         }

@@ -14,65 +14,67 @@ export const EditPost = () => {
 
     const [tags, setTags] = useState([])
     const [originalTags, setOriginalTags] = useState([])
-    const [postTags, setPostTags] = useState([])
     const [doneLoading, setLoading] = useState(false)
-
     const [checkedTags, setCheckedTags] = useState([])
     
-    /*useEffect(
+    useEffect(
         () => {
-            postTags.map((postTag) => {
-                 tags.map((tag) => {
-                    if (postTag.tag_id === tag.id) {
-                        tag.isChecked = true
-                    }
-                    else {
-                        tag.isChecked = false
-                    }
-                })
+            tags.map((tag) => {
+                if(post.tags){
+                    post.tags.map((postTag) => {
+                        if (postTag.tag_id === tag.id) {
+                            tag.isChecked = true
+                        }
+                        else {
+                            tag.isChecked = false
+                        }
+                    })
+            } else {
+                tag.isChecked = false
+            }
             })
             setTags(tags)
         },
-        [categories]
-    )*/
+        [originalTags]
+    )
         
 
 
 
-    /*const matchingId = (id) => {
+    const matchingId = (id) => {
 
         let idArray = []
 
-        postTags.map((postTag) => {
-            if (postTag.tag_id === id) {
-                idArray.push(postTag.tag_id)
+        post?.tags?.map((postTag) => {
+            if (postTag.id === id) {
+                idArray.push(postTag.id)
             }
         }
         )
 
         if (idArray.length > 0) {
-            return true‰
+            return true
         }
 
         else {
             return false
         }
         
-    }*/
+    }
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/posts/${postId}`)
+            fetch(`http://localhost:8000/posts/${postId}`,{
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then(post => setPost(post))
-            .then(() => fetch(`http://localhost:8088/post_tags?post_id=${postId}`))
-                .then(response =>response.json())
-                .then(thisPostsTags => {
-                    setPostTags(thisPostsTags)
+
                     getCategories().then(categoryData => setCategories(categoryData))
                     setLoading(true)
-            
-        }) 
+             
             
         },
         [postId])
@@ -83,10 +85,10 @@ export const EditPost = () => {
                 getTags().then((tagData) => {
                     let newTagsArray = []
                     for (const tag of tagData) {
-                        if(postTags){
-                            for (const postTag of postTags) {
+                        if(post.tags){
+                            for (const postTag of post.tags) {
                                 
-                                if (postTag.tag_id === tag.id) {
+                                if (postTag.id === tag.id) {
                                     tag.isChecked = true
                                     tag.postTagId = postTag.id
                                     break
@@ -103,33 +105,33 @@ export const EditPost = () => {
                             newTagsArray.push(tag)
                         }
                     }
-                
+                    debugger
                setTags(newTagsArray)
                setOriginalTags(newTagsArray)})
                 
             },
-            [doneLoading])
+            [categories])
 
 
     const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    // const userObject = JSON.parse(localUser)
 
     
     const updatePost = (event) => {
         event.preventDefault()
 
         const updatedPostToSendToAPI = {
-            user_id: userObject,
+            // user_id: userObject,
             category_id: post.category_id,
             title: post.title,
             publication_date: post.publication_date,
-            image_url: post.image_url,
+            post_image_url: post.image_url,
             content: post.content
         }
 
         if(originalTags !== tags){
             for (const tag of tags) {
-                let foundPostTag = postTags.find(pt => {
+                let foundPostTag = post.tags.find(pt => {
                     return pt.post_id === parseInt(postId) && pt.tag_id === tag.id
                 })
                 if(!foundPostTag && tag.isChecked){
@@ -137,26 +139,38 @@ export const EditPost = () => {
                         post_id: postId,
                         tag_id: tag.id
                     }
-                    fetch("http://localhost:8088/post_tags", { 
+                    fetch(`http://localhost:8000/posts/${post.id}/addTag`, { 
                         method: "POST", 
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+
                         },
                         body: JSON.stringify(postTagsToSendToAPI)
                     })    
                     .then(response => response.json())
                 } else if (tag.isChecked === false && foundPostTag){
-                    fetch(`http://localhost:8088/post_tags/${tag.postTagId}`, {
-                        method: "DELETE"
+                    let postTagToRemove = {
+                        post_id: postId,
+                        tag_id: tag.id
+                    }
+                    fetch(`http://localhost:8000/posts/${post.id}/removeTag`, {
+                        method: "DELETE",
+                        headers: {
+                            "content-type": "application/json",
+                            "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                        },
+                        body: postTagToRemove
                     })
                 }
             }
         }
 
-        return fetch(`http://localhost:8088/posts/${postId}`, {
+        return fetch(`http://localhost:8000/posts/${postId}`, {
             method: "PUT",
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
             },
             body: JSON.stringify(updatedPostToSendToAPI)
         })
@@ -168,6 +182,7 @@ export const EditPost = () => {
     }
 
     const changeChecked = (e) => {
+        debugger
         const copy = structuredClone(tags)
         let tag = tags.find(t => t.id === parseInt(e.target.value))
         if(e.target.checked){
@@ -272,11 +287,12 @@ export const EditPost = () => {
         </fieldset>
         <fieldset>
             {
-                tags.map(tag => <>
+                tags?.map(tag => <>
                 <input type="checkbox" id={"tag-"+tag.id} name={tag.id}
                 value={tag.id} checked={tag.isChecked? "checked": ""}
                 onChange = {
                     (e) => {
+                        debugger
                         changeChecked(e)
                     }
                 }
