@@ -8,12 +8,15 @@ export const Comments = () => {
     const { postId } = useParams()
     const [comments, setComments] = useState([])
     const navigate = useNavigate()
-    const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    
 
     useEffect(
         () => {
-            fetch(`http://localhost:8000/comments/${postId}`)
+            fetch(`http://localhost:8000/comments?post=${postId}`, {
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("auth_token")}`
+                }
+            })
                 .then(response => response.json())
                 .then((commentsArray) => {
                     setComments(commentsArray)
@@ -23,7 +26,12 @@ export const Comments = () => {
 
     const removeComment = (id) => {
         return fetch(`http://localhost:8000/comments/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("auth_token")}`
+            }
         })
             .then(() => {
                 window.location.reload()
@@ -35,20 +43,22 @@ export const Comments = () => {
         <div className="commentsSection">
             {
                 comments.map((comment) => {
-                    let author = false
-                    if (comment.author_id === userObject) {
-                        author = true
-                    }
-                    return <li className="commentBox">
+                    
+                    return <div className="commentBox">
                         <div className="postInfo">
-                            <p>{comment?.content}</p>
+                            <p>{comment.content}</p>
                             {
-                                author
-                                    ? <button onClick={() => removeComment(comment.id)}>&#128465;</button>
-                                    : ""
+                                comment.created
+                                ? <button onClick = {
+                                    () => {
+                                        removeComment(comment.id)
+                                    }
+                                }>Delete</button>
+                                : ""
                             }
+                            
                         </div>
-                    </li>
+                    </div>
                 }
                 )
             }
