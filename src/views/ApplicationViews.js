@@ -19,23 +19,22 @@ import { AddComment } from "../components/posts/postAddComment"
 export const ApplicationViews = ({ token, setToken }) => {
   return <>
     <Routes>
-      <Route path="/" element={<HomePosts />} />
-      <Route path="/tags" element={<TagManager />} />
-      <Route path="/tags" element={<TagList />} />
       <Route path="/login" element={<Login setToken={setToken} />} />
       <Route path="/register" element={<Register setToken={setToken} />} />
-      <Route path="/posts" element={<Posts />} />
-      <Route path="/users" element={<UserList setToken={setToken} />} />
-      <Route path="/categories" element={<CategoryList />} />
-      <Route path="/my_posts" element={<MyPosts />} />
-      <Route path="/edit_post/:postId" element={<EditPost />} />
-      <Route path="/postForm" element={<PostForm />} />
-      <Route path="/posts/:postId" element={<PostDetails />} />
-      <Route path="/comments/:postId" element={<Comments />} />
-      <Route path="/addComment/:postId" element={<AddComment />} />
+      <Route element={<Authorized token={token} />}> 
+        <Route path="/" element={<HomePosts />} />
+        <Route path="/tags" element={<TagManager />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/users" element={<UserList setToken={setToken} />} />
+        <Route path="/categories" element={<CategoryList />} />
+        <Route path="/my_posts" element={<MyPosts />} />
+        <Route path="/edit_post/:postId" element={<EditPost />} />
+        <Route path="/postForm" element={<PostForm />} />
+        <Route path="/posts/:postId" element={<PostDetails />} />
+        <Route path="/comments/:postId" element={<Comments />} />
+        <Route path="/addComment/:postId" element={<AddComment />} />
 
-      <Route path="/users/:userId" element={<UserDetail />} />
-      <Route element={<Authorized token={token} />}>
+        <Route path="/users/:userId" element={<UserDetail />} />
 
         {/* Add Routes here */}
 

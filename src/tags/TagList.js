@@ -8,6 +8,8 @@ export const TagList = () => {
     const [tag, setTag] = useState({})
     const [userWantsToEditTag, setTagToEdit] = useState([false])
     const [selectedTag, setSelectedTag] = useState([])
+    const localUser = localStorage.getItem("auth_token")
+    const userObject = localUser
     
 
     useEffect(() => {

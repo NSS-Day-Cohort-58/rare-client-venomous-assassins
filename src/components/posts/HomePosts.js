@@ -9,7 +9,7 @@ export const HomePosts = () => {
     const [subscriptions, setSubscriptions] = useState([])
     const [doneLoading, setLoading] = useState(false)
     const localUser = localStorage.getItem("auth_token")
-    const userObject = JSON.parse(localUser)
+    const userObject = localUser
 
 
     useEffect(

@@ -16,3 +16,7 @@ export const Rare = () => {
     <ApplicationViews token={token} setToken={setToken} />
   </>
 }
+
+
+// 
+// token={token} setToken={setToken} 
